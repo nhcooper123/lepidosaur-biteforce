@@ -27,3 +27,4 @@ raw-data/*
 
 # Mac
 *.DS_Store
+.Rproj.user
