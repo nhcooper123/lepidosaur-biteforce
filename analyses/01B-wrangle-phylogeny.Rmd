@@ -1,0 +1,107 @@
+---
+title: "Wrangle phylogeny prior to PGLS analyses"
+output: html_document
+---
+
+Load libraries
+```{r, message = FALSE, warning = FALSE}
+library(ape)
+library(geiger)
+library(tidyverse)
+library(phytools)
+```
+
+Read in data and phylogeny
+```{r, message = FALSE, warning = FALSE}
+max_bf <- read_csv(here("data/max_bf.csv"))
+lepidosaurtree <- read.tree(here("raw-data/WrightTree.nex"))
+str(lepidosaurtree)
+```
+
+Replace spaces with underscores (_) so they match up with species names in the tree
+```{r}
+max_bf <-
+  max_bf %>%
+  mutate(tips = str_replace(BinomialReptileDatabase, " ", "_"))
+```
+
+Update taxonomy in tree to match Uetz 2020.
+```{r}
+lepidosaurtree$tip.label <- gsub("Typhlosaurus_lineatus", "Acontias_kgalagadi",
+                                 lepidosaurtree$tip.label)
+lepidosaurtree$tip.label <- gsub("Glaphyromorphus_isolepis", "Eremiascincus_isolepis",
+                                 lepidosaurtree$tip.label)
+lepidosaurtree$tip.label <- gsub("Cordylus_cataphractus", "Ouroborus_cataphractus",
+                                 lepidosaurtree$tip.label)
+lepidosaurtree$tip.label <- gsub("Cordylus_warreni", "Smaug_mossambicus",
+                                 lepidosaurtree$tip.label)
+lepidosaurtree$tip.label <- gsub("Uromastyx_acanthinura", "Uromastix_acanthinura",
+                                 lepidosaurtree$tip.label)
+lepidosaurtree$tip.label <- gsub("Microacontias_litoralis", "Acontias_litoralis",
+                                 lepidosaurtree$tip.label)
+lepidosaurtree$tip.label <- gsub("Cryptoblepharus_boutonii",
+                                 "Cryptoblepharus_metallicus", lepidosaurtree$tip.label)
+lepidosaurtree$tip.label <- gsub("Gallotia_gomerana", "Gallotia_bravoana",
+                                 lepidosaurtree$tip.label)
+lepidosaurtree$tip.label <- gsub("Liolaemus_zullyi", "Liolaemus_zullyae",
+                                 lepidosaurtree$tip.label)
+lepidosaurtree$tip.label <- gsub("Podarcis_atrata", "Podarcis_liolepis",
+                                 lepidosaurtree$tip.label)
+lepidosaurtree$tip.label <- gsub("Laudakia_stellio", "Stellagama_stellio",
+                                 lepidosaurtree$tip.label)
+lepidosaurtree$tip.label <- gsub("Bradypodion_caffrum", "Bradypodion_caffer",
+                                 lepidosaurtree$tip.label)
+lepidosaurtree$tip.label <- gsub("Cordylus_polyzonus", "Karusasaurus_polyzonus",
+                                 lepidosaurtree$tip.label)
+lepidosaurtree$tip.label <- gsub("Lygosoma_afrum", "Mochlus_sundevallii",
+                                 lepidosaurtree$tip.label)
+lepidosaurtree$tip.label <- gsub("Tupinambis_merianae", "Salvator_merianae",
+                                 lepidosaurtree$tip.label)
+```
+
+Add species that are missing from the phylogeny, based on other phylogenies in the literature. Create separate tree so we can use trees without added species if needed.
+```{r}
+lepidosaurtree2 <- lepidosaurtree
+
+lepidosaurtree2 <- bind.tip(lepidosaurtree2, tip.label = "Bradypodion_kentanicum",
+                           where = 2446, position = 0.1)
+lepidosaurtree2 <- bind.tip(lepidosaurtree2, tip.label = "Liolaemus_mapuche",
+                           where = 2768, position = 0.1)
+lepidosaurtree2 <- bind.tip(lepidosaurtree2, tip.label = "Bradypodion_caeruleogula",
+                           where = 6618, position = 0.5)
+lepidosaurtree2 <- bind.tip(lepidosaurtree2, tip.label = "Xenosaurus_newmanorum",
+                           where = 3341, position = 0.1)
+lepidosaurtree2 <- bind.tip(lepidosaurtree2, tip.label = "Anolis_pentaprion",
+                           where = 2970, position = 0.1)
+```
+
+Identify mismatches between species in the data and phylogenies
+```{r}
+check <- name.check(phy = lepidosaurtree, 
+                    data = max_bf, data.names = max_bf$tips)
+check2 <- name.check(phy = lepidosaurtree2, 
+                    data = max_bf, data.names = max_bf$tips)
+```
+
+Drop species missing from the trees which are not in our data using drop.tip
+```{r}
+lepidosaurtree <- drop.tip(lepidosaurtree, check$tree_not_data)
+lepidosaurtree2 <- drop.tip(lepidosaurtree2, check$tree_not_data)
+```
+
+Check various tree properties (should all be TRUE)
+```{r}
+is.binary.tree(lepidosaurtree)
+is.ultrametric(lepidosaurtree)
+is.rooted(lepidosaurtree)
+is.binary.tree(lepidosaurtree2)
+is.ultrametric(lepidosaurtree2)
+is.rooted(lepidosaurtree2)
+```
+
+Save trees for future use
+```{r}
+write.nexus(lepidosaurtree, file = here("data/lepidosaur-tree.nex"))
+write.nexus(lepidosaurtree2, file = here("data/lepidosaur-tree-plus.nex"))
+```
+                                
