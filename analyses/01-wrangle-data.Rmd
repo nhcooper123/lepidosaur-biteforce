@@ -35,6 +35,7 @@ Read in the raw data
 bfdata <- read_csv(here("raw-data/biteforce-data.csv"))
 ecodata <- read_csv(here("raw-data/ecological-data.csv"))
 ```
+
 ## Data cleaning
 
 ```{r}
@@ -65,8 +66,8 @@ bfdata1 <-
                        Family == "Leiosauridae" ~ "Iguania",
                      Family == "Sphenodontidae" ~ "Sphenodontia")) %>%
   # Convert SE to SD where we have SE but no SD 
-  # Note that for BF I use SSBF (sample size for bite force)
-  # For morphological variables I use SSM (sample size morphometrics)
+  # Note that for BF we use SSBF (sample size for bite force)
+  # For morphological variables we use SSM (sample size morphometrics)
   mutate(BF.SD = case_when(is.na(BF.SD) & !is.na(BF.SE) ~ se2sd(BF.SE, SSBF),
                            TRUE ~ BF.SD)) %>%
   mutate(SVL.SD = case_when(is.na(SVL.SD) & !is.na(SVL.SE) ~ se2sd(SVL.SE, SSM),
@@ -82,8 +83,6 @@ bfdata1 <-
   mutate(LJL.SD = case_when(is.na(LJL.SD) & !is.na(LJL.SE) ~ se2sd(LJL.SE, SSM),
                            TRUE ~ LJL.SD)) %>%
   # Convert SD to SE where we have SD but no SE
-  # Note that for BF I used SSBF (sample size for bite force)
-  # For morphological variables I used SSM (sample size morphometrics)
   mutate(BF.SE = case_when(is.na(BF.SE) & !is.na(BF.SD) ~ sd2se(BF.SD, SSBF),
                            TRUE ~ BF.SE)) %>%
   mutate(SVL.SE = case_when(is.na(SVL.SE) & !is.na(SVL.SD) ~ sd2se(SVL.SD, SSM),
@@ -99,24 +98,22 @@ bfdata1 <-
   mutate(LJL.SE = case_when(is.na(LJL.SE) & !is.na(LJL.SD) ~ sd2se(LJL.SD, SSM),
                            TRUE ~ LJL.SE)) %>%
   # Create columns of BF and each morphological variable + the SD (as a proxy for the max)
-  # Note: In the raw dataset, this will also input BF + SD values for species with "bad" quality data
-  # however these species/individuals should not be used for SD analysis 
-  mutate(bf_plus_sd = BF + BF.SD) %>%
-  mutate(svl_plus_sd = SVL + SVL.SD) %>%
-  mutate(bm_plus_sd = BM + BM.SD) %>%
-  mutate(hl_plus_sd = HL + HL.SD) %>%
-  mutate(hw_plus_sd = HW + HW.SD) %>%
-  mutate(hh_plus_sd = HH + HH.SD) %>%
-  mutate(ljl_plus_sd = LJL + LJL.SD) %>%
+  # Note we use sum, not + so that if there is no SE or SD this outputs the mean.
+  mutate(bf_plus_sd = sum(BF, BF.SD, na.rm = TRUE)) %>%
+  mutate(svl_plus_sd = sum(SVL, SVL.SD, na.rm = TRUE)) %>%
+  mutate(bm_plus_sd = sum(BM, BM.SD, na.rm = TRUE)) %>%
+  mutate(hl_plus_sd = sum(HL, HL.SD, na.rm = TRUE)) %>%
+  mutate(hw_plus_sd = sum(HW, HW.SD, na.rm = TRUE)) %>%
+  mutate(hh_plus_sd = sum(HH, HH.SD, na.rm = TRUE)) %>%
+  mutate(ljl_plus_sd = sum(LJL, LJL.SD, na.rm = TRUE)) %>%
   # Create columns of BF and each morphological variable + the SE (as a proxy for the max)
-  # Note: same as above ^
-  mutate(bf_plus_se = BF + BF.SE) %>%
-  mutate(svl_plus_se = SVL + SVL.SE) %>%
-  mutate(bm_plus_se = BM + BM.SE) %>%
-  mutate(hl_plus_se = HL + HL.SE) %>%
-  mutate(hw_plus_se = HW + HW.SE) %>%
-  mutate(hh_plus_se = HH + HH.SE) %>%
-  mutate(ljl_plus_se = LJL + LJL.SE) %>%
+  mutate(bf_plus_se = sum(BF, BF.SE, na.rm = TRUE)) %>%
+  mutate(svl_plus_se = sum(SVL, SVL.SE, na.rm = TRUE)) %>%
+  mutate(bm_plus_se = sum(BM, BM.SE, na.rm = TRUE)) %>%
+  mutate(hl_plus_se = sum(HL, HL.SE, na.rm = TRUE)) %>%
+  mutate(hw_plus_se = sum(HW, HW.SE, na.rm = TRUE)) %>%
+  mutate(hh_plus_se = sum(HH, HH.SE, na.rm = TRUE)) %>%
+  mutate(ljl_plus_se = sum(LJL, LJL.SE, na.rm = TRUE)) %>%
   # Add a column that says how many NAs each row has
   mutate(number_NAs = rowSums(is.na(.)))
 ```
