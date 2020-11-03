@@ -82,17 +82,28 @@ bfdata1 <-
                            TRUE ~ HH.SD)) %>%
   mutate(LJL.SD = case_when(is.na(LJL.SD) & !is.na(LJL.SE) ~ se2sd(LJL.SE, SSM),
                            TRUE ~ LJL.SD)) %>%
-  # Create columns of BF and each morphological variable + the SD (as a proxy for the max)
-  # Note we use sum, not + so that if there is no SD this outputs the mean.
+  # Add a column that says how many NAs each row has
+  mutate(number_NAs = rowSums(is.na(.)))
+
+# Create columns of BF and each morphological variable + the SD (as a proxy for the max)
+# Note we use sum, not + so that if there is no SD this outputs the mean.
+bfdata1 <-
+  bfdata1 %>%
+  rowwise() %>% 
   mutate(bf_plus_sd = sum(BF, BF.SD, na.rm = TRUE)) %>%
   mutate(svl_plus_sd = sum(SVL, SVL.SD, na.rm = TRUE)) %>%
   mutate(bm_plus_sd = sum(BM, BM.SD, na.rm = TRUE)) %>%
   mutate(hl_plus_sd = sum(HL, HL.SD, na.rm = TRUE)) %>%
   mutate(hw_plus_sd = sum(HW, HW.SD, na.rm = TRUE)) %>%
   mutate(hh_plus_sd = sum(HH, HH.SD, na.rm = TRUE)) %>%
-  mutate(ljl_plus_sd = sum(LJL, LJL.SD, na.rm = TRUE)) %>%
-  # Add a column that says how many NAs each row has
-  mutate(number_NAs = rowSums(is.na(.)))
+  mutate(ljl_plus_sd = sum(LJL, LJL.SD, na.rm = TRUE))
+
+# This introduces 0 where there is no value for the variable at all
+# Replace with NAs
+  bfdata1[bfdata1 == 0] <- NA
+
+# look at it
+# bfdata1
 ```
 
 Expand the ecological data to get more useful habitat categories
