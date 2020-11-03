@@ -65,6 +65,8 @@ bfdata1 <-
                        Family == "Tropiduridae" | Family == "Liolaemidae" | 
                        Family == "Leiosauridae" ~ "Iguania",
                      Family == "Sphenodontidae" ~ "Sphenodontia")) %>%
+  # Replace spaces with underscores (_) so they match up with species names in the tree
+  mutate(tips = str_replace(BinomialReptileDatabase, " ", "_")) %>%
   # Convert SE to SD where we have SE but no SD 
   # Note that for BF we use SSBF (sample size for bite force)
   # For morphological variables we use SSM (sample size morphometrics)
