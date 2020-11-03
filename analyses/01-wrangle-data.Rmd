@@ -167,7 +167,7 @@ max_bf <-
    distinct(BinomialReptileDatabase, .keep_all = TRUE) %>%
   
    # Select columns we want
-   select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, 
+   select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, tips,
           SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl)
 
 # Look at it
@@ -200,7 +200,7 @@ max_bf_males <-
    distinct(BinomialReptileDatabase, .keep_all = TRUE) %>%
   
    # Select columns we want
-   select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, 
+   select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, tips,
           SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl)
 ```    
 
@@ -231,7 +231,7 @@ max_bf_females <-
    distinct(BinomialReptileDatabase, .keep_all = TRUE) %>%
   
    # Select columns we want
-   select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, 
+   select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, tips,
           SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl)
 ```
 
@@ -256,7 +256,7 @@ max_bf_sd <-
    arrange(number_NAs) %>% 
    distinct(BinomialReptileDatabase, .keep_all = TRUE) %>%
    # Select columns we want
-    select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, 
+    select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, tips,
            SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl)
 
 # Look at it
@@ -285,7 +285,7 @@ max_bf_sd_males <-
    arrange(number_NAs) %>% 
    distinct(BinomialReptileDatabase, .keep_all = TRUE) %>%
    # Select columns we want
-    select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, 
+    select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, tips,
            SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl)
 ```
 
@@ -311,7 +311,7 @@ max_bf_sd_females <-
    arrange(number_NAs) %>% 
    distinct(BinomialReptileDatabase, .keep_all = TRUE) %>%
    # Select columns we want
-    select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, 
+    select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, tips,
            SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl)
 ```
   
