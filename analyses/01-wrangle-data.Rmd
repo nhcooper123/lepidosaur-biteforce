@@ -167,6 +167,9 @@ max_bf <-
    # Select columns we want
    select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, 
           SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl)
+
+# Look at it
+max_bf
 ```  
 
 ### 2. max_bf_males
@@ -246,13 +249,16 @@ max_bf_sd <-
    mutate(max_ljl = get_max(LJL.MAX, ljl_plus_sd))  %>%
    # Filter by the max bite force + sd for each species
    group_by(BinomialReptileDatabase) %>%
-   filter(bf_plus_sd == max(bf_plus_sd)) %>%
+   filter(max_bf == max(max_bf)) %>%
    # Where two individuals in a species have the same max, filter by data quality
    arrange(number_NAs) %>% 
    distinct(BinomialReptileDatabase, .keep_all = TRUE) %>%
    # Select columns we want
     select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, 
            SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl)
+
+# Look at it
+max_bf_sd
 ```  
 
 ### 5. max_bf_sd_males
@@ -272,7 +278,7 @@ max_bf_sd_males <-
   filter(Sex == "Male" & Sex != "unknown") %>%
   # Filter by the max bite force + sd for each species
    group_by(BinomialReptileDatabase) %>%
-   filter(bf_plus_sd == max(bf_plus_sd)) %>%
+   filter(max_bf == max(max_bf)) %>%
    # Where two individuals in a species have the same max, filter by data quality
    arrange(number_NAs) %>% 
    distinct(BinomialReptileDatabase, .keep_all = TRUE) %>%
@@ -298,7 +304,7 @@ max_bf_sd_females <-
   filter(Sex == "Female" & Sex != "unknown") %>%
   # Filter by the max bite force + sd for each species
    group_by(BinomialReptileDatabase) %>%
-   filter(bf_plus_sd == max(bf_plus_sd)) %>%
+   filter(max_bf == max(max_bf)) %>%
    # Where two individuals in a species have the same max, filter by data quality
    arrange(number_NAs) %>% 
    distinct(BinomialReptileDatabase, .keep_all = TRUE) %>%
@@ -309,11 +315,11 @@ max_bf_sd_females <-
   
 Write each dataset to csv for further analyses
 ```{r}
-write_csv(bfdata_all, file = here("data/biteforce-ecology-data.csv"))
-write_csv(max_bf, file = here("data/max_bf.csv"))
-write_csv(max_bf_males, file = here("data/max_bf_males.csv"))
-write_csv(max_bf_females, file = here("data/max_bf_females.csv"))
-write_csv(max_bf_sd, file = here("data/avg_bf_plus_sd.csv"))
-write_csv(max_bf_sd_males, file = here("data/avg_bf_plus_sd_males.csv"))
-write_csv(max_bf_sd_females, file = here("data/avg_bf_plus_sd_females.csv"))
+write_csv(bfdata_all, path = here("data/biteforce-ecology-data.csv"))
+write_csv(max_bf, path = here("data/max_bf.csv"))
+write_csv(max_bf_males, path = here("data/max_bf_males.csv"))
+write_csv(max_bf_females, path = here("data/max_bf_females.csv"))
+write_csv(max_bf_sd, path = here("data/max_bf_sd.csv"))
+write_csv(max_bf_sd_males, path = here("data/max_bf_sd_males.csv"))
+write_csv(max_bf_sd_females, path = here("data/max_bf_sd_females.csv"))
 ```
