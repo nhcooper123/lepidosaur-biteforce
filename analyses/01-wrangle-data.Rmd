@@ -1,5 +1,5 @@
 ---
-title: "Wrangle the data"
+title: "Wrangle the data into datasets for analyses"
 output: html_document
 ---
 
@@ -51,20 +51,44 @@ bfdata1 <-
             LJL.MIN, BF.MIN, Age)) %>%
   # Replace NA values with "unknown" in sex column
   mutate(Sex = replace_na(Sex, "unknown")) %>% 
-  # Append superfamily column
+  # Append higher taxonomy column
   mutate(HigherTaxonomy = 
-           case_when(Family == "Gekkonidae" | Family == "Phyllodactylidae" ~ "Gekkota",
-                     Family == "Cordylidae" | Family == "Scincidae" ~ "Scincoidea", 
-                     Family == "Trogonophidae" | Family == "Lacertidae" | 
-                       Family == "Teiidae" ~ "Lacertoidea", 
-                     Family == "Anguidae" | Family == "Xenosauridae" | 
-                       Family == "Varanidae" ~ "Anguimorpha", 
-                     Family == "Chamaeleonidae" | Family == "Agamidae" | 
-                       Family == "Phrynosomatidae" | Family == "Iguanidae" | 
-                       Family == "Crotaphytidae" | Family == "Dactyloidae" |
-                       Family == "Tropiduridae" | Family == "Liolaemidae" | 
-                       Family == "Leiosauridae" ~ "Iguania",
-                     Family == "Sphenodontidae" ~ "Sphenodontia")) %>%
+           case_when(Family == "Gekkonidae" | Family == "Phyllodactylidae" | 
+                     Family == "Carphodactylidae" | Family == "Diplodactylidae" | 
+                     Family == "Eublepharidae" | Family == "Sphaerodactylidae" | 
+                     Family == "Pygopodidae" ~ "Gekkota",
+                     
+                     Family == "Cordylidae" | Family == "Scincidae" |
+                     Family == "Gerrhosauridae" | 
+                     Family == "Xantusiidae" ~ "Scincoidea", 
+                
+                     Family == "Anguidae" | Family == "Diploglossidae" | 
+                     Family == "Shinisauridae" | Family == "Xenosauridae" |
+                     Family == "Helodermatidae" | Family == "Lanthanotidae" | 
+                     Family == "Varanidae" ~ "Anguimorpha",  
+                     
+                     Family == "Dibamidae" ~ "Dibamia",
+                     
+                     Family == "Chamaeleonidae" | Family == "Agamidae" 
+                     ~ "Acrodonta",
+                    
+                     Family == "Phrynosomatidae" | Family == "Iguanidae" | 
+                     Family == "Crotaphytidae" | Family == "Dactyloidae" |
+                     Family == "Tropiduridae" | Family == "Liolaemidae" | 
+                     Family == "Corytophanidae" | Family == "Hoplocercidae" | 
+                     Family == "Leiocephalidae" | Family == "Leiosauridae" | 
+                     Family == "Opluridae" | Family == "Polychrotidae" 
+                     ~ "Pleurodonta",
+                     
+                     Family == "Alopoglossidae" | Family == "Gymnophthalmidae" | 
+                     Family == "Teiidae" |
+                     Family == "Amphisbaenidae" | Family == "Bipedidae" | 
+                     Family == "Blanidae" | Family == "Cadeidae" | 
+                     Family == "Rhineuridae" | Family == "Trogonophidae" |
+                     Family == "Lacertidae" 
+                     ~ "Lacertoidea",
+      
+                     Family == "Sphenodontidae" ~ "Rhynchocephalia")) %>%
   # Replace spaces with underscores (_) so they match up with species names in the tree
   mutate(tips = str_replace(BinomialReptileDatabase, " ", "_")) %>%
   # Convert SE to SD where we have SE but no SD 
@@ -167,7 +191,7 @@ max_bf <-
    distinct(BinomialReptileDatabase, .keep_all = TRUE) %>%
   
    # Select columns we want
-   select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, tips,
+   select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy,  tips,
           SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl)
 
 # Look at it
@@ -200,7 +224,7 @@ max_bf_males <-
    distinct(BinomialReptileDatabase, .keep_all = TRUE) %>%
   
    # Select columns we want
-   select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, tips,
+   select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy,  tips,
           SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl)
 ```    
 
@@ -231,7 +255,7 @@ max_bf_females <-
    distinct(BinomialReptileDatabase, .keep_all = TRUE) %>%
   
    # Select columns we want
-   select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, tips,
+   select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy,  tips,
           SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl)
 ```
 
@@ -256,11 +280,13 @@ max_bf_sd <-
    arrange(number_NAs) %>% 
    distinct(BinomialReptileDatabase, .keep_all = TRUE) %>%
    # Select columns we want
-    select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, tips,
+    select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy,  tips,
            SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl)
 
 # Look at it
-max_bf_sd
+max_bf_sd 
+# How many of each sex?
+max_bf_sd %>% group_by(Sex) %>% summarise(n())
 ```  
 
 ### 5. max_bf_sd_males
