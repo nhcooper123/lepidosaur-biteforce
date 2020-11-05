@@ -1,0 +1,110 @@
+---
+title: "Exploring the data: distribution of biteforce"
+author: "Natalie Cooper"
+---
+
+
+Load libraries
+```{r}
+library(ape)
+library(tidyverse)
+library(geiger)
+library(tidytree)
+library(treeio)
+library(ggtree)
+library(knitr)
+library(ggstance)
+library(patchwork)
+
+# Helper functions for plotting
+remove_y <- 
+  theme(axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+
+remove_x <- 
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+
+# Colour palette
+sf_colours <- c("#ffc100", "#47b881", "#5588ff", 
+                "#efbbff", "#ff7400", "#090088", "#800080")
+
+# "Acrodonta"    #ffc100 = yellow   
+# "Anguimorpha"     #47b881 = green
+# "Dibamia"     "brown"    
+# "Gekkota" #5588ff = lighter blue       
+# "Lacertoidea"    #efbbff = pink
+# "Pleurodonta"     #ff7400 = orange
+# "Rhynchocephalia" #090088 = dark blue
+# "Scincoidea" #800080 = purple
+```
+
+Read in the data
+```{r, message = FALSE}
+ds1 <- read_csv(here("data/max_bf.csv"))
+```
+
+First let's look at bite force per family
+
+```{r}
+family_bf1 <-
+  ds1 %>%
+  group_by(Family, HigherTaxonomy) %>%
+  summarise(MeanBF = mean(log(max_bf)),
+            SeBF = sd(log(max_bf))/sqrt(n()),
+            n())
+```
+
+```{r}
+ggplot(ds1, aes(y = log(max_bf), x = Family, colour = HigherTaxonomy)) + 
+  geom_point(alpha = 0.5) +
+  geom_point(data = family_bf1, aes(y = MeanBF), size = 3) +
+  geom_errorbar(data = family_bf1, 
+                aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
+                show.legend = FALSE, width = 0.4) +
+  scale_colour_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  #scale_y_continuous(breaks=seq(0,45,5)) +
+  xlab("Family") +
+  ylab("ln(bite-force) (N)") + 
+  ylim(-3, 7) +
+  theme(legend.position = "right", legend.title = element_blank())
+
+# Save plot
+#ggsave(here("figures/bite-force-by-family.png"), height = 5)
+```
+
+Bite force per higher grouping
+
+```{r}
+higher_bf1 <-
+  ds1 %>%
+  group_by(HigherTaxonomy) %>%
+  summarise(MeanBF = mean(log(max_bf)),
+            SeBF = sd(log(max_bf))/sqrt(n()),
+            n())
+
+higher_bf1
+```
+
+```{r}
+ggplot(ds1, aes(y = log(max_bf), x = HigherTaxonomy, colour = HigherTaxonomy)) + 
+  geom_point(alpha = 0.5) +
+  geom_point(data = higher_bf1, aes(y = MeanBF), size = 3) +
+  geom_errorbar(data = higher_bf1, 
+                aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
+                show.legend = FALSE, width = 0.2) +
+  scale_colour_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  xlab("Family") +
+  ylab("ln(bite-force) (N)") + 
+  ylim(-3, 7) +
+  theme(legend.position = "right", legend.title = element_blank())
+
+# Save plot
+#ggsave(here("figures/bite-force-by-higher.png"), height = 5, width = 7)
+```
