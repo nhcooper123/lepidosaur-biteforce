@@ -1,0 +1,284 @@
+---
+title: "Exploring the data: distribution across taxonomy/phylogeny"
+author: "Natalie Cooper"
+---
+
+
+Load libraries
+```{r}
+library(ape)
+library(tidyverse)
+library(geiger)
+library(tidytree)
+library(treeio)
+library(ggtree)
+library(knitr)
+library(ggstance)
+library(patchwork)
+
+# Helper functions for plotting
+remove_y <- 
+  theme(axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+
+remove_x <- 
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+
+# Colour palette
+sf_colours <- c("#ffc100", "#47b881", "brown", "#5588ff", 
+                "#efbbff", "#ff7400", "#090088", "#800080")
+
+# "Acrodonta"    #ffc100 = yellow   
+# "Anguimorpha"     #47b881 = green
+# "Dibamia"     "brown"    
+# "Gekkota" #5588ff = lighter blue       
+# "Lacertoidea"    #efbbff = pink
+# "Pleurodonta"     #ff7400 = orange
+# "Rhynchocephalia" #090088 = dark blue
+# "Scincoidea" #800080 = purple
+
+```
+
+Read in the tree and the data, including the bite force data and the summary taxonomy data from Uetz et al 2020 plus higher taxonomy from Burbrink et al 2019.
+
+```{r}
+tree <- read.nexus(here("data/family-tree.nex"))
+ds <- read_csv(here("data/max_bf.csv"))
+taxa <- read_csv(here("data/taxonomy-data.csv"))
+```
+
+First let's look at the numbers per family, and how the % coverage looks for each family relative to the studies and to the taxonomic distributions...
+
+```{r}
+family_ds <-
+  ds %>%
+  group_by(Family) %>%
+  summarise(nBF = n()) %>%
+  full_join(taxa) %>%
+  mutate(percent_taxa = (nBF/Species_Uetz) * 100) %>%
+  mutate(percent_studies = (nBF/164) * 100) %>%
+  select(HigherTaxonomy, everything()) %>%
+  arrange(HigherTaxonomy, Family)
+
+# Replace NAs with 0
+family_ds[is.na(family_ds)] <- 0
+
+# Print
+kable(family_ds, digits = 3)
+```
+
+Next let's look at the numbers per higher taxonomic group, and how the % coverage looks for each family relative to the studies and to the taxonomic distributions...
+
+```{r}
+# Summarise the taxonomy data so it gives numbers per superfamily not family
+taxa_higher <-
+  taxa %>%
+  group_by(HigherTaxonomy) %>%
+  summarise(species_Uetz = sum(Species_Uetz))
+
+higher_ds <-
+  ds %>%
+  group_by(HigherTaxonomy) %>%
+  summarise(nBF = n()) %>%
+  full_join(taxa_higher) %>%
+  mutate(percent_taxa = (nBF/species_Uetz) * 100) %>%
+  mutate(percent_studies = (nBF/164) * 100) %>%
+  arrange(HigherTaxonomy)
+  
+# Replace NAs with 0
+higher_ds[is.na(higher_ds)] <- 0
+
+# Print
+kable(higher_ds, digits = 3)
+```
+
+### Plots of distributions
+
+Family level plots
+```{r}
+p1 <- 
+  ggplot(family_ds, aes(y = nBF, x = Family, fill = HigherTaxonomy)) + 
+  geom_bar(position = position_stack(reverse = TRUE), stat = "identity") +
+  scale_fill_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  #scale_y_continuous(breaks=seq(0,45,5)) +
+  xlab("Family") +
+  ylab("species (n)") +
+  theme(legend.position = "none")
+
+# To aid plotting switch 100 for 0 in Sphenodon
+family_ds[family_ds == 100] <- 0
+
+p2 <-
+  ggplot(family_ds, aes(y = percent_taxa, x = Family, fill = HigherTaxonomy)) + 
+  geom_bar(position = position_stack(reverse = TRUE), stat = "identity") +
+  scale_fill_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  #scale_y_continuous(breaks=seq(0,50,5)) +
+  xlab("Family") +
+  ylab("coverage (%)") +
+  theme(legend.position = "right") +
+  remove_y
+
+p1 + p2
+
+# Save plot
+#ggsave(here("figures/family-level-data-coverage.png"), height = 7)
+```
+
+Higher taxonomy level plots
+```{r}
+p1 <- 
+  ggplot(higher_ds, aes(y = nBF, x = HigherTaxonomy, fill = HigherTaxonomy)) + 
+  geom_bar(position = position_stack(reverse = TRUE), stat = "identity") +
+  scale_fill_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  ylim(0, 80) +
+  #scale_y_continuous(breaks=seq(0,45,5)) +
+  xlab("Taxonomic group") +
+  ylab("species (n)") +
+  theme(legend.position = "none")
+
+# To aid plotting switch 100 for 0 in Sphenodon
+higher_ds[higher_ds == 100] <- 0
+
+p2 <-
+  ggplot(higher_ds, aes(y = percent_taxa, x = HigherTaxonomy, fill = HigherTaxonomy)) + 
+  geom_bar(position = position_stack(reverse = TRUE), stat = "identity") +
+  scale_fill_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  ylim(0,10) +
+  xlab("Taxonomic group") +
+  ylab("coverage (%)") +
+  theme(legend.position = "none") +
+  remove_y
+
+p1 + p2
+
+# Save plot
+# ggsave(here("figures/higher-level-data-coverage.png"), height = 5)
+
+```
+
+### Plotting on the phylogeny
+
+Ensure the data is in the same order as the tree and make it into a dataframe
+```{r}
+family_ds <- family_ds[match(tree$tip.label, family_ds$Family),]
+
+# Replace 0s with NA
+family_ds[is.na(family_ds)] <- 0
+
+# Reorder the columns so Family is first
+family_ds <-
+  family_ds %>%
+  select(Family, everything())
+
+# Add rownames as family names
+rownames(family_ds) <- family_ds$Family
+
+# Make sure family_ds is a dataframe
+family_ds <- as.data.frame(family_ds)
+```
+
+Make trees using ggtree.
+
+Note that this code will throw lots of warnings about scales which can be ignored
+```{r}
+tree_cols <- c("brown", rep("#5588ff", 7), rep("#efbbff", 10),
+               rep("#ffc100", 2), rep("#ff7400", 12), rep("#47b881", 7),
+               rep("#800080", 4), "#090088")
+
+# Make the tree base
+base <- 
+  ggtree(tree) +
+  geom_tiplab(geom = "text", offset = 5, col = tree_cols)
+
+# Plot species numbers as facet
+p1 <- facet_plot(base, panel = 'Species (n)', 
+                data = family_ds, 
+                geom = geom_barh, 
+                mapping = aes(x = nBF,
+                              fill = HigherTaxonomy), 
+                stat = 'identity') +
+  theme(legend.position = "none") +
+  scale_fill_manual(values = sf_colours)
+
+# Plot % coverage as facet on top of old facet
+p2 <- 
+  facet_plot(p1, panel = 'Coverage (%)', 
+                data = family_ds, 
+                geom = geom_barh, 
+                mapping = aes(x = percent_taxa,
+                              fill = HigherTaxonomy), 
+                stat = 'identity') +
+  theme_bw(base_size = 14) + 
+  theme(legend.position = "right", legend.title = element_blank(),
+        strip.background = element_rect(fill="white")) +
+  xlim_tree(500) + 
+  xlim_expand(c(0, 5), 'Coverage (%)') +
+  remove_y +
+  scale_fill_manual(values = sf_colours)
+
+p2
+
+# Save the plot
+#ggsave(here("figures/phylogeny-data-coverage-colours.png"), height = 7, width = 10)
+
+
+#### NOT INCLUDED BUT LEFT HERE FOR REFERENCE
+
+# Creat new mini dataset to add the x labels
+#d <- data.frame(.panel = c('Tree', 'Species in dataset (n)', 'Taxonomic coverage (%)'), 
+#                lab = c("time (MYA)", "number", "%"), 
+#                x = c(250, 20, 50), y = -2)
+
+# Add x labels
+#p2 + scale_y_continuous(limits = c(0, 45), 
+                        #expand = c(0,0), 
+                        #oob = function(x, ...) x) +
+    #geom_text(aes(label = lab), data=d) + 
+    #coord_cartesian(clip = 'off')  + 
+    #theme(plot.margin = margin(6, 6, 40, 6))
+
+```
+
+
+```{r}
+# To make a tree with tip labels coloured by group
+# note that you cannot put this into a facet plot
+base %<+% family_ds + geom_tippoint(aes(color = HigherTaxonomy), size = 3) +
+  scale_colour_manual(values = sf_colours)
+
+# To make a tree with branches coloured by group
+# note that you cannot put this into a facet plot
+circ <- 
+  ggtree(tree, layout = "circular") +
+  geom_tiplab(geom = "text", offset = 5)
+
+# Add colours based on HigherTaxonomy
+grp <- list(Acrodonta = c(family_ds$Family[family_ds$HigherTaxonomy == "Acrodonta"]), 
+            Anguimorpha = c(family_ds$Family[family_ds$HigherTaxonomy == "Anguimorpha"]), 
+            Dibamia = c(family_ds$Family[family_ds$HigherTaxonomy == "Dibamia"]), 
+            Gekkota = c(family_ds$Family[family_ds$HigherTaxonomy == "Gekkota"]), 
+            Lacertoidea = c(family_ds$Family[family_ds$HigherTaxonomy == "Lacertoidea"]), 
+            Pleurodonta = c(family_ds$Family[family_ds$HigherTaxonomy == "Pleurodonta"]), 
+            Rhynchocephalia = c(family_ds$Family[family_ds$HigherTaxonomy == "Rhynchocephalia"]),
+            Scincoidea = c(family_ds$Family[family_ds$HigherTaxonomy == "Scincoidea"])) 
+
+  groupOTU(circ, grp, 'HigherTaxonomy') + aes(color = HigherTaxonomy) +
+  scale_colour_manual(values = c("black", sf_colours)) +
+  theme(legend.position="none")
+  
+# Save tree plot
+# Currently doesn't fit all tip labels in plot window...
+# ggsave(here("figures/phylogeny-family-coloured.png"), height = 10, width = 30)
+```
+
