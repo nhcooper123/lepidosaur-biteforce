@@ -1,0 +1,15 @@
+Sex,HigherTaxonomy,MeanBF,SeBF,n()
+Female,Acrodonta,2.763,0.231,15
+Female,Anguimorpha,2.643,0.14,3
+Female,Gekkota,1.172,NA,1
+Female,Lacertoidea,2.318,0.304,27
+Female,Pleurodonta,1.488,0.124,62
+Female,Rhynchocephalia,4.79,NA,1
+Female,Scincoidea,1.846,1.705,3
+Male,Acrodonta,2.885,0.227,18
+Male,Anguimorpha,3.234,0.423,4
+Male,Gekkota,2.536,0.835,2
+Male,Lacertoidea,2.691,0.247,36
+Male,Pleurodonta,2,0.128,64
+Male,Rhynchocephalia,5.153,NA,1
+Male,Scincoidea,3.259,0.791,7
