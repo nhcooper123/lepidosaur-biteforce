@@ -46,7 +46,7 @@ bfdata1 <-
   # Remove juveniles and sub-adults
   filter(!Age %in% c("JV", "SA")) %>% 
   # Remove unneeded columns
-  select(-c(Journal, Year, BinomialStudy, SC, Notes, 
+  dplyr::select(-c(Journal, Year, BinomialStudy, SC, Notes, 
             BM.MIN, SVL.MIN, HL.MIN, HW.MIN, HH.MIN, 
             LJL.MIN, BF.MIN, Age)) %>%
   # Replace NA values with "unknown" in sex column
@@ -191,8 +191,9 @@ max_bf <-
    distinct(BinomialReptileDatabase, .keep_all = TRUE) %>%
   
    # Select columns we want
-   select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy,  tips,
-          SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl)
+   dplyr::select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy,  tips,
+          SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl,
+          arboreal, fossorial, Diet)
 
 # Look at it
 max_bf
@@ -224,8 +225,9 @@ max_bf_males <-
    distinct(BinomialReptileDatabase, .keep_all = TRUE) %>%
   
    # Select columns we want
-   select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy,  tips,
-          SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl)
+   dplyr::select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy,  tips,
+          SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl,
+          arboreal, fossorial, Diet)
 ```    
 
 ### 3. max_bf_females
@@ -255,8 +257,9 @@ max_bf_females <-
    distinct(BinomialReptileDatabase, .keep_all = TRUE) %>%
   
    # Select columns we want
-   select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy,  tips,
-          SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl)
+   dplyr::select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy,  tips,
+          SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl,
+          arboreal, fossorial, Diet)
 ```
 
 ### 4.  max_bf_sd
@@ -280,8 +283,9 @@ max_bf_sd <-
    arrange(number_NAs) %>% 
    distinct(BinomialReptileDatabase, .keep_all = TRUE) %>%
    # Select columns we want
-    select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy,  tips,
-           SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl)
+    dplyr::select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy,  tips,
+           SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl,
+          arboreal, fossorial, Diet)
 
 # Look at it
 max_bf_sd 
@@ -311,8 +315,9 @@ max_bf_sd_males <-
    arrange(number_NAs) %>% 
    distinct(BinomialReptileDatabase, .keep_all = TRUE) %>%
    # Select columns we want
-    select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, tips,
-           SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl)
+    dplyr::select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, tips,
+           SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl,
+          arboreal, fossorial, Diet)
 ```
 
 ### 6. max_bf_sd_females
@@ -337,8 +342,9 @@ max_bf_sd_females <-
    arrange(number_NAs) %>% 
    distinct(BinomialReptileDatabase, .keep_all = TRUE) %>%
    # Select columns we want
-    select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, tips,
-           SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl)
+    dplyr::select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, tips,
+           SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl,
+          arboreal, fossorial, Diet)
 ```
   
 Write each dataset to csv for further analyses
