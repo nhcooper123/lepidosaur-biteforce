@@ -114,11 +114,181 @@ ggplot(ds1, aes(y = log(max_bf), x = HigherTaxonomy, colour = HigherTaxonomy)) +
 #ggsave(here("figures/bite-force-by-higher.png"), height = 5, width = 7)
 ```
 
+Bite force per higher grouping
+```{r}
+higher_bf1 <-
+  ds1 %>%
+  group_by(HigherTaxonomy) %>%
+  summarise(MeanBF = round(mean(log(max_bf)), digits = 3),
+            SeBF = round(sd(log(max_bf))/sqrt(n()), digits = 3),
+            n())
+
+higher_bf1
+
+#write_csv(higher_bf1, path = here("tables/bite-force-by-higher.csv"))
+```
+
+```{r}
+higherplot <-
+  ggplot(ds1, aes(y = log(max_bf), x = HigherTaxonomy, colour = HigherTaxonomy)) + 
+  geom_jitter(alpha = 0.5, width = 0.2) +
+  geom_point(data = higher_bf1, aes(y = MeanBF), size = 3) +
+  geom_errorbar(data = higher_bf1, 
+                aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
+                show.legend = FALSE, width = 0.2) +
+  scale_colour_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  xlab("") +
+  ylab("ln(bite-force) (N)") + 
+  ylim(-3, 7) +
+  theme(legend.position = "none", legend.title = element_blank()) +
+  labs(tag = "A") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12))
+
+# Save plot
+#ggsave(here("figures/bite-force-by-higher.png"), height = 5, width = 7)
+```
+
+Bite force per diet
+```{r}
+diet_bf1 <-
+  ds1 %>%
+  filter(!is.na(Diet)) %>%
+  group_by(Diet) %>%
+  summarise(MeanBF = round(mean(log(max_bf)), digits = 3),
+            SeBF = round(sd(log(max_bf))/sqrt(n()), digits = 3),
+            n())
+
+diet_bf1
+
+ds1_diet
+#write_csv(diet_bf1, path = here("tables/bite-force-by-diet.csv"))
+```
+
+```{r}
+# Remove NAs
+ds1_diet <- filter(ds1, !is.na(Diet))
+
+dietplot <-
+  ggplot(ds1_diet, aes(y = log(max_bf), x = Diet)) + 
+  geom_jitter(alpha = 0.5, width = 0.2) +
+  geom_point(data = diet_bf1, aes(y = MeanBF), size = 3, col = "red") +
+  geom_errorbar(data = diet_bf1, 
+                aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
+                show.legend = FALSE, width = 0.2, col = "red") +
+  scale_colour_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  xlab("diet") +
+  ylab("ln(bite-force) (N)") + 
+  ylim(-3, 7) +
+  theme(legend.position = "right", legend.title = element_blank()) +
+  labs(tag = "B") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12))
+```
+
+Bite force per arboreality
+```{r}
+arb_bf1 <-
+  ds1 %>%
+  filter(!is.na(arboreal)) %>%
+  group_by(arboreal) %>%
+  summarise(MeanBF = round(mean(log(max_bf)), digits = 3),
+            SeBF = round(sd(log(max_bf))/sqrt(n()), digits = 3),
+            n())
+
+arb_bf1
+
+#write_csv(arb_bf1, path = here("tables/bite-force-by-arboreal.csv"))
+```
+
+```{r}
+# Remove NAs
+ds1_arb <- filter(ds1, !is.na(arboreal))
+
+arbplot <-
+  ggplot(ds1_arb, aes(y = log(max_bf), x = arboreal)) + 
+  geom_jitter(alpha = 0.5, width = 0.2) +
+  geom_point(data = arb_bf1, aes(y = MeanBF), size = 3, col = "red") +
+  geom_errorbar(data = arb_bf1, 
+                aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
+                show.legend = FALSE, width = 0.2, col = "red") +
+  scale_colour_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  xlab("arboreal") +
+  ylab("ln(bite-force) (N)") + 
+  ylim(-3, 7) +
+  theme(legend.position = "right", legend.title = element_blank()) +
+  labs(tag = "C") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12))
+```
+
+Bite force per fossoriality
+```{r}
+fos_bf1 <-
+  ds1 %>%
+  filter(!is.na(fossorial)) %>%
+  group_by(fossorial) %>%
+  summarise(MeanBF = round(mean(log(max_bf)), digits = 3),
+            SeBF = round(sd(log(max_bf))/sqrt(n()), digits = 3),
+            n())
+
+fos_bf1
+
+#write_csv(arb_bf1, path = here("tables/bite-force-by-fossorial.csv"))
+```
+
+```{r}
+# Remove NAs
+ds1_fos <- filter(ds1, !is.na(fossorial))
+
+fosplot <-
+  ggplot(ds1_fos, aes(y = log(max_bf), x = fossorial)) + 
+  geom_jitter(alpha = 0.5, width = 0.2) +
+  geom_point(data = fos_bf1, aes(y = MeanBF), size = 3, col = "red") +
+  geom_errorbar(data = fos_bf1, 
+                aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
+                show.legend = FALSE, width = 0.2, col = "red") +
+  scale_colour_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  xlab("fossorial") +
+  ylab("ln(bite-force) (N)") + 
+  ylim(-3, 7) +
+  theme(legend.position = "right", legend.title = element_blank()) +
+  labs(tag = "D") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12))
+```
+
+```{r}
+# Plot all together
+
+higherplot + (dietplot / arbplot / fosplot)
+
+# Save plot
+#ggsave(here("figures/bite-force-by-ecology.png"), height = 5)
+```
+
+
+
 ## Males and females
 
 ```{r}
 # Stick the datasets together
 both1 <- rbind(ds1_female, ds1_male)
+
+# And for all the data
+ds1a <-
+  ds1 %>%
+  mutate(Sex = rep("both", length(ds1$Sex)))
+
+all <- rbind(both1, ds1a)
 ```
 
 ```{r}
