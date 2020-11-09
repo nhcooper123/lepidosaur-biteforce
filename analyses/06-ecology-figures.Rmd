@@ -17,6 +17,7 @@ library(knitr)
 library(caper)
 library(ggstance)
 library(patchwork)
+library(here)
 
 # Helper functions for plotting
 remove_y <- 
@@ -66,7 +67,6 @@ max_bf_males <- data.frame(max_bf_males)
 
 Read in phylogeny
 ```{r}
-tree <- read.nexus(here("data/lepidosaur-tree.nex"))
 tree_plus <- read.nexus(here("data/lepidosaur-tree-plus.nex"))
 ```
 
@@ -294,7 +294,7 @@ hh <-
 #ggsave(here("figures/bodysize-bite-force-arboreal.png"), height = 5)
 ```
 
-Plots coloured by ARBOREAL
+Plots coloured by FOSSORIAL
 
 ```{r}
 # Remove NAs
@@ -319,7 +319,7 @@ svl <-
               slope = coefficients(model1f)[2] + coefficients(model1f)[4], colour = f_colours[2])
 
 hw <-
-  ggplot(lepidosaur_f, aes(y = log(max_bf), x = log(max_hw), colour = arboreal)) + 
+  ggplot(lepidosaur_f, aes(y = log(max_bf), x = log(max_hw), colour = fossorial)) + 
   geom_point(alpha = 0.5) +
   scale_colour_manual(values = f_colours) +
   theme_bw(base_size = 14) +
@@ -337,7 +337,7 @@ hw <-
               slope = coefficients(model2f)[2] + coefficients(model2f)[4], colour = f_colours[2])
   
 hl <-
-  ggplot(lepidosaur_f, aes(y = log(max_bf), x = log(max_hl), colour = arboreal)) + 
+  ggplot(lepidosaur_f, aes(y = log(max_bf), x = log(max_hl), colour = fossorial)) + 
   geom_point(alpha = 0.5) +
   scale_colour_manual(values = f_colours) +
   theme_bw(base_size = 14) +
@@ -355,7 +355,7 @@ hl <-
               slope = coefficients(model3f)[2] + coefficients(model3f)[4], colour = f_colours[2])
   
 hh <-
-  ggplot(lepidosaur_f, aes(y = log(max_bf), x = log(max_hh), colour = arboreal)) + 
+  ggplot(lepidosaur_f, aes(y = log(max_bf), x = log(max_hh), colour = fossorial)) + 
   geom_point(alpha = 0.5) +
   scale_colour_manual(values = f_colours) +
   theme_bw(base_size = 14) +
@@ -513,7 +513,7 @@ hh <-
 #ggsave(here("figures/bodysize-bite-force-arboreal-noslope.png"), height = 5)
 ```
 
-Plots coloured by ARBOREAL
+Plots coloured by FOSSORIAL
 
 ```{r}
 # Remove NAs
@@ -534,7 +534,7 @@ svl <-
         legend.position = "none") 
 
 hw <-
-  ggplot(lepidosaur_f, aes(y = log(max_bf), x = log(max_hw), colour = arboreal)) + 
+  ggplot(lepidosaur_f, aes(y = log(max_bf), x = log(max_hw), colour = fossorial)) + 
   geom_point(alpha = 0.5) +
   scale_colour_manual(values = f_colours) +
   theme_bw(base_size = 14) +
@@ -548,7 +548,7 @@ hw <-
         legend.position = "none") 
   
 hl <-
-  ggplot(lepidosaur_f, aes(y = log(max_bf), x = log(max_hl), colour = arboreal)) + 
+  ggplot(lepidosaur_f, aes(y = log(max_bf), x = log(max_hl), colour = fossorial)) + 
   geom_point(alpha = 0.5) +
   scale_colour_manual(values = f_colours) +
   theme_bw(base_size = 14) +
@@ -562,7 +562,7 @@ hl <-
         legend.position = "none") 
   
 hh <-
-  ggplot(lepidosaur_f, aes(y = log(max_bf), x = log(max_hh), colour = arboreal)) + 
+  ggplot(lepidosaur_f, aes(y = log(max_bf), x = log(max_hh), colour = fossorial)) + 
   geom_point(alpha = 0.5) +
   scale_colour_manual(values = f_colours) +
   theme_bw(base_size = 14) +
