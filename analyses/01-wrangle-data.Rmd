@@ -144,6 +144,11 @@ bfdata1 %>%
 filter(!is.na(BF.MAX)) %>%
   select(BinomialReptileDatabase) %>%
   distinct()
+# How many studies have max BF?           
+bfdata1 %>%
+filter(!is.na(BF.MAX)) %>%
+  select(Citation) %>%
+  distinct()
 ```
 
 Expand the ecological data to get more useful habitat categories
