@@ -130,6 +130,20 @@ bfdata1 <-
 
 # look at it
 # bfdata1
+  
+# Get a few summary numbers  
+# Total number of records
+dim(bfdata1)
+# How many records have max BF?
+bfdata1 %>%
+filter(!is.na(BF.MAX)) %>%
+  group_by(Sex) %>%
+  summarise(n())
+# How many species have max BF?           
+bfdata1 %>%
+filter(!is.na(BF.MAX)) %>%
+  select(BinomialReptileDatabase) %>%
+  distinct()
 ```
 
 Expand the ecological data to get more useful habitat categories
