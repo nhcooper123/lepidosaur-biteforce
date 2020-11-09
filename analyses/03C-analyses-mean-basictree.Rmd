@@ -63,7 +63,7 @@ lepidosaur_males <- comparative.data(phy = tree, data = max_bf_males,
 
 Set up output files
 ```{r}
-output <- data.frame(array(dim = c(20, 17)))
+output <- data.frame(array(dim = c(40, 17)))
 names(output) <- c("dataset", "sex", "tree", "morph", "covariate", "lambda", "residual_df", 
                    "df_morph", "F_morph", "p_morph", 
                    "df_covariate", "F_covariate", "p_covariate", 
@@ -114,7 +114,7 @@ anova(model1)
 summary(model1)
 
 # Save outputs
-output <- write_output(model1, dataset = "mean", sex = "all", tree = "full",
+output <- write_output(model1, dataset = "mean", sex = "all", tree = "basic",
                        morph = "SVL", covariate = "diet", n = 1)
 ```
 
@@ -131,7 +131,7 @@ anova(model2)
 summary(model2)
 
 # Save outputs
-output <- write_output(model2, dataset = "mean", sex = "female", tree = "full",
+output <- write_output(model2, dataset = "mean", sex = "female", tree = "basic",
                        morph = "SVL", covariate = "diet", n = 2)
 ```
 
@@ -148,7 +148,7 @@ anova(model3)
 summary(model3)
 
 # Save outputs
-output <- write_output(model3, dataset = "mean", sex = "male", tree = "full",
+output <- write_output(model3, dataset = "mean", sex = "male", tree = "basic",
                        morph = "SVL", covariate = "diet", n = 3)
 ```
 
@@ -167,7 +167,7 @@ anova(model4)
 summary(model4)
 
 # Save outputs
-output <- write_output(model4, dataset = "mean", sex = "all", tree = "full",
+output <- write_output(model4, dataset = "mean", sex = "all", tree = "basic",
                        morph = "HW", covariate = "diet", n = 4)
 ```
 
@@ -184,7 +184,7 @@ anova(model5)
 summary(model5)
 
 # Save outputs
-output <- write_output(model5, dataset = "mean", sex = "female", tree = "full",
+output <- write_output(model5, dataset = "mean", sex = "female", tree = "basic",
                        morph = "HW", covariate = "diet", n = 5)
 ```
 
@@ -201,7 +201,7 @@ anova(model6)
 summary(model6)
 
 # Save outputs
-output <- write_output(model6, dataset = "mean", sex = "male", tree = "full",
+output <- write_output(model6, dataset = "mean", sex = "male", tree = "basic",
                        morph = "HW", covariate = "diet", n = 6)
 ```
 
@@ -222,7 +222,7 @@ anova(model7)
 summary(model7)
 
 # Save outputs
-output <- write_output(model7, dataset = "mean", sex = "all", tree = "full",
+output <- write_output(model7, dataset = "mean", sex = "all", tree = "basic",
                        morph = "SVL", covariate = "arboreal", n = 7)
 ```
 
@@ -239,7 +239,7 @@ anova(model8)
 summary(model8)
 
 # Save outputs
-output <- write_output(model8, dataset = "mean", sex = "female", tree = "full",
+output <- write_output(model8, dataset = "mean", sex = "female", tree = "basic",
                        morph = "SVL", covariate = "arboreal", n = 8)
 ```
 
@@ -256,7 +256,7 @@ anova(model9)
 summary(model9)
 
 # Save outputs
-output <- write_output(model9, dataset = "mean", sex = "male", tree = "full",
+output <- write_output(model9, dataset = "mean", sex = "male", tree = "basic",
                        morph = "SVL", covariate = "arboreal", n = 9)
 ```
 
@@ -275,7 +275,7 @@ anova(model10)
 summary(model10)
 
 # Save outputs
-output <- write_output(model10, dataset = "mean", sex = "all", tree = "full",
+output <- write_output(model10, dataset = "mean", sex = "all", tree = "basic",
                        morph = "HW", covariate = "arboreal", n = 10)
 ```
 
@@ -292,7 +292,7 @@ anova(model11)
 summary(model11)
 
 # Save outputs
-output <- write_output(model11, dataset = "mean", sex = "female", tree = "full",
+output <- write_output(model11, dataset = "mean", sex = "female", tree = "basic",
                        morph = "HW", covariate = "arboreal", n = 11)
 ```
 
@@ -309,7 +309,7 @@ anova(model12)
 summary(model12)
 
 # Save outputs
-output <- write_output(model12, dataset = "mean", sex = "male", tree = "full",
+output <- write_output(model12, dataset = "mean", sex = "male", tree = "basic",
                        morph = "HW", covariate = "arboreal", n = 12)
 ```
 
@@ -329,7 +329,7 @@ anova(model13)
 summary(model13)
 
 # Save outputs
-output <- write_output(model13, dataset = "mean", sex = "all", tree = "full",
+output <- write_output(model13, dataset = "mean", sex = "all", tree = "basic",
                        morph = "SVL", covariate = "fossorial", n = 13)
 ```
 
@@ -350,7 +350,7 @@ anova(model14)
 summary(model14)
 
 # Save outputs
-output <- write_output(model14, dataset = "mean", sex = "all", tree = "full",
+output <- write_output(model14, dataset = "mean", sex = "all", tree = "basic",
                        morph = "HW", covariate = "fossorial", n = 14)
 ```
 > Cannot fit models to males and females as no sexed fossorial specimens exist
@@ -403,7 +403,7 @@ anova(model15)
 summary(model15)
 
 # Save outputs
-output <- write_output(model15, dataset = "mean", sex = "all", tree = "full",
+output <- write_output(model15, dataset = "mean", sex = "all", tree = "basic",
                        morph = "SVL", covariate = "taxonomy", n = 15)
 ```
 
@@ -420,7 +420,7 @@ anova(model16)
 summary(model16)
 
 # Save outputs
-output <- write_output(model16, dataset = "mean", sex = "female", tree = "full",
+output <- write_output(model16, dataset = "mean", sex = "female", tree = "basic",
                        morph = "SVL", covariate = "taxonomy", n = 16)
 ```
 
@@ -437,7 +437,7 @@ anova(model17)
 summary(model17)
 
 # Save outputs
-output <- write_output(model17, dataset = "mean", sex = "male", tree = "full",
+output <- write_output(model17, dataset = "mean", sex = "male", tree = "basic",
                        morph = "SVL", covariate = "taxonomy", n = 17)
 ```
 
@@ -456,7 +456,7 @@ anova(model18)
 summary(model18)
 
 # Save outputs
-output <- write_output(model18, dataset = "mean", sex = "all", tree = "full",
+output <- write_output(model18, dataset = "mean", sex = "all", tree = "basic",
                        morph = "HW", covariate = "taxonomy", n = 18)
 ```
 
@@ -473,7 +473,7 @@ anova(model19)
 summary(model19)
 
 # Save outputs
-output <- write_output(model19, dataset = "mean", sex = "female", tree = "full",
+output <- write_output(model19, dataset = "mean", sex = "female", tree = "basic",
                        morph = "HW", covariate = "taxonomy", n = 19)
 ```
 
@@ -490,8 +490,371 @@ anova(model20)
 summary(model20)
 
 # Save outputs
-output <- write_output(model20, dataset = "mean", sex = "male", tree = "full",
+output <- write_output(model20, dataset = "mean", sex = "male", tree = "basic",
                        morph = "HW", covariate = "taxonomy", n = 20)
+```
+
+## HH and HL measures
+
+## HH + Diet
+
+```{r}
+# Fit model
+model21 <- pgls(log(max_bf) ~ log(max_hh) * as.factor(Diet), data = lepidosaur,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model21)
+
+# Look at outputs
+anova(model21)
+summary(model21)
+
+# Save outputs
+output <- write_output(model21, dataset = "mean", sex = "all", tree = "basic",
+                       morph = "HH", covariate = "diet", n = 21)
+```
+
+```{r}
+# Fit model
+model22 <- pgls(log(max_bf) ~ log(max_hh) * as.factor(Diet), data = lepidosaur_females,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model22)
+
+# Look at outputs
+anova(model22)
+summary(model22)
+
+# Save outputs
+output <- write_output(model22, dataset = "mean", sex = "female", tree = "basic",
+                       morph = "HH", covariate = "diet", n = 22)
+```
+
+```{r}
+# Fit model
+model23 <- pgls(log(max_bf) ~ log(max_hh) * as.factor(Diet), data = lepidosaur_males,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model23)
+
+# Look at outputs
+anova(model23)
+summary(model23)
+
+# Save outputs
+output <- write_output(model23, dataset = "mean", sex = "male", tree = "basic",
+                       morph = "HH", covariate = "diet", n = 23)
+```
+
+### HL + DIET
+
+```{r}
+# Fit model
+model24 <- pgls(log(max_bf) ~ log(max_hl) * as.factor(Diet), data = lepidosaur,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model24)
+
+# Look at outputs
+anova(model24)
+summary(model24)
+
+# Save outputs
+output <- write_output(model24, dataset = "mean", sex = "all", tree = "basic",
+                       morph = "HL", covariate = "diet", n = 24)
+```
+
+```{r}
+# Fit model
+model25 <- pgls(log(max_bf) ~ log(max_hl) * as.factor(Diet), data = lepidosaur_females,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model25)
+
+# Look at outputs
+anova(model25)
+summary(model25)
+
+# Save outputs
+output <- write_output(model25, dataset = "mean", sex = "female", tree = "basic",
+                       morph = "HL", covariate = "diet", n = 25)
+```
+
+```{r}
+# Fit model
+model26 <- pgls(log(max_bf) ~ log(max_hl) * as.factor(Diet), data = lepidosaur_males,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model26)
+
+# Look at outputs
+anova(model26)
+summary(model26)
+
+# Save outputs
+output <- write_output(model26, dataset = "mean", sex = "male", tree = "basic",
+                       morph = "HL", covariate = "diet", n = 26)
+```
+
+## HH + ARBOREAL
+
+```{r}
+# Fit model
+model27 <- pgls(log(max_bf) ~ log(max_hh) * as.factor(arboreal), data = lepidosaur,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model27)
+
+# Look at outputs
+anova(model27)
+summary(model27)
+
+# Save outputs
+output <- write_output(model27, dataset = "mean", sex = "all", tree = "basic",
+                       morph = "HH", covariate = "arboreal", n = 27)
+```
+
+```{r}
+# Fit model
+model28 <- pgls(log(max_bf) ~ log(max_hh) * as.factor(arboreal), data = lepidosaur_females,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model28)
+
+# Look at outputs
+anova(model28)
+summary(model28)
+
+# Save outputs
+output <- write_output(model28, dataset = "mean", sex = "female", tree = "basic",
+                       morph = "HH", covariate = "arboreal", n = 28)
+```
+
+```{r}
+# Fit model
+model29 <- pgls(log(max_bf) ~ log(max_hh) * as.factor(arboreal), data = lepidosaur_males,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model29)
+
+# Look at outputs
+anova(model29)
+summary(model29)
+
+# Save outputs
+output <- write_output(model29, dataset = "mean", sex = "male", tree = "basic",
+                       morph = "HH", covariate = "arboreal", n = 29)
+```
+
+### HL + ARBOREAL
+
+```{r}
+# Fit model
+model30 <- pgls(log(max_bf) ~ log(max_hl) * as.factor(arboreal), data = lepidosaur,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model30)
+
+# Look at outputs
+anova(model30)
+summary(model30)
+
+# Save outputs
+output <- write_output(model30, dataset = "mean", sex = "all", tree = "basic",
+                       morph = "HL", covariate = "arboreal", n = 30)
+```
+
+```{r}
+# Fit model
+model31 <- pgls(log(max_bf) ~ log(max_hl) * as.factor(arboreal), data = lepidosaur_females,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model31)
+
+# Look at outputs
+anova(model31)
+summary(model31)
+
+# Save outputs
+output <- write_output(model31, dataset = "mean", sex = "female", tree = "basic",
+                       morph = "HL", covariate = "arboreal", n = 31)
+```
+
+```{r}
+# Fit model
+model32 <- pgls(log(max_bf) ~ log(max_hl) * as.factor(arboreal), data = lepidosaur_males,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model32)
+
+# Look at outputs
+anova(model32)
+summary(model32)
+
+# Save outputs
+output <- write_output(model32, dataset = "mean", sex = "male", tree = "basic",
+                       morph = "HL", covariate = "arboreal", n = 32)
+```
+
+### HH + FOSSORIAL
+
+```{r}
+# Fit model
+model33 <- pgls(log(max_bf) ~ log(max_hh) * as.factor(fossorial), data = lepidosaur,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model33)
+
+# Look at outputs
+anova(model33)
+summary(model33)
+
+# Save outputs
+output <- write_output(model33, dataset = "mean", sex = "all", tree = "basic",
+                       morph = "HH", covariate = "fossorial", n = 33)
+```
+
+> Cannot fit models to males and females as no sexed fossorial specimens exist
+
+### HL + FOSSORIAL
+
+```{r}
+# Fit model
+model34 <- pgls(log(max_bf) ~ log(max_hl) * as.factor(fossorial), data = lepidosaur,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model34)
+
+# Look at outputs
+anova(model34)
+summary(model34)
+
+# Save outputs
+output <- write_output(model34, dataset = "mean", sex = "all", tree = "basic",
+                       morph = "HL", covariate = "fossorial", n = 34)
+```
+> Cannot fit models to males and females as no sexed fossorial specimens exist
+
+### HH + HigherTaxonomy
+
+Rhynchocephalia and Gekkota do nto have enough species to fit the model so we need to remove them
+
+```{r}
+# Fit model
+model35 <- pgls(log(max_bf) ~ log(max_hh) * as.factor(HigherTaxonomy), 
+                data = lepidosaur_x, lambda = "ML", bounds = list(lambda = c(0.1,1)))
+
+# Check model diagnostics
+plot(model35)
+
+# Look at outputs
+anova(model35)
+summary(model35)
+
+# Save outputs
+output <- write_output(model35, dataset = "mean", sex = "all", tree = "basic",
+                       morph = "HH", covariate = "taxonomy", n = 35)
+```
+
+```{r}
+# Fit model
+model36 <- pgls(log(max_bf) ~ log(max_hh) * as.factor(HigherTaxonomy), 
+                data = lepidosaur_females_x, lambda = "ML")
+
+# Check model diagnostics
+plot(model36)
+
+# Look at outputs
+anova(model36)
+summary(model36)
+
+# Save outputs
+output <- write_output(model36, dataset = "mean", sex = "female", tree = "basic",
+                       morph = "HH", covariate = "taxonomy", n = 36)
+```
+
+```{r}
+# Fit model
+model37 <- pgls(log(max_bf) ~ log(max_hh) * as.factor(HigherTaxonomy), data = lepidosaur_males_x,
+                   lambda = "ML", bounds = list(lambda = c(0.1,1)))
+
+# Check model diagnostics
+plot(model37)
+
+# Look at outputs
+anova(model37)
+summary(model37)
+
+# Save outputs
+output <- write_output(model37, dataset = "mean", sex = "male", tree = "basic",
+                       morph = "HH", covariate = "taxonomy", n = 37)
+```
+
+### HL + FOSSORIAL
+
+```{r}
+# Fit model
+model38 <- pgls(log(max_bf) ~ log(max_hl) * as.factor(HigherTaxonomy), data = lepidosaur_x,
+                   lambda = "ML", bounds = list(lambda = c(0.1,1)))
+
+# Check model diagnostics
+plot(model38)
+
+# Look at outputs
+anova(model38)
+summary(model38)
+
+# Save outputs
+output <- write_output(model38, dataset = "mean", sex = "all", tree = "basic",
+                       morph = "HL", covariate = "taxonomy", n = 38)
+```
+
+```{r}
+# Fit model
+model39 <- pgls(log(max_bf) ~ log(max_hl) * as.factor(HigherTaxonomy), data = lepidosaur_females_x,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model39)
+
+# Look at outputs
+anova(model39)
+summary(model39)
+
+# Save outputs
+output <- write_output(model39, dataset = "mean", sex = "female", tree = "basic",
+                       morph = "HL", covariate = "taxonomy", n = 39)
+```
+
+```{r}
+# Fit model
+model40 <- pgls(log(max_bf) ~ log(max_hl) * as.factor(HigherTaxonomy), data = lepidosaur_males_x,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model40)
+
+# Look at outputs
+anova(model40)
+summary(model40)
+
+# Save outputs
+output <- write_output(model40, dataset = "mean", sex = "male", tree = "basic",
+                       morph = "HL", covariate = "taxonomy", n = 40)
 ```
 
 Write all outputs to file
