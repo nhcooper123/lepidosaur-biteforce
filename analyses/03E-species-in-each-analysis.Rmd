@@ -1,0 +1,187 @@
+---
+title: "Species in each analysis"
+output: html_document
+---
+
+## Preparation
+
+Load libraries
+```{r, message = FALSE, warning = FALSE}
+library(ape)
+library(caper)
+library(tidyverse)
+library(patchwork)
+library(broom)
+library(here)
+```
+
+Read in the data
+```{r, message = FALSE}
+ds1 <- read_csv(here("data/max_bf.csv"))
+ds1_male <- read_csv(here("data/max_bf_males.csv"))
+ds1_female <- read_csv(here("data/max_bf_females.csv"))
+
+## Remove the species not in the tree and therefore not in the analyses
+ds1 <-
+  ds1 %>%
+  filter(BinomialReptileDatabase != "Diplolaemus leopardinus" &
+          BinomialReptileDatabase != "Tropidurus semitaeniatus" &
+           BinomialReptileDatabase != "Aspidoscelis sonorae")
+
+ds1_male <-
+  ds1_male %>%
+  filter(BinomialReptileDatabase != "Diplolaemus leopardinus" &
+          BinomialReptileDatabase != "Tropidurus semitaeniatus" &
+           BinomialReptileDatabase != "Aspidoscelis sonorae")
+
+ds1_female <-
+  ds1_female %>%
+  filter(BinomialReptileDatabase != "Diplolaemus leopardinus" &
+          BinomialReptileDatabase != "Tropidurus semitaeniatus" &
+           BinomialReptileDatabase != "Aspidoscelis sonorae")
+
+
+# Stick the datasets together
+both1 <- rbind(ds1_female, ds1_male)
+
+# And for all the data
+ds1a <-
+  ds1 %>%
+  mutate(Sex = rep("Both", length(ds1$Sex)))
+
+all <- rbind(both1, ds1a)
+```
+
+Get counts...
+```{r}
+svl_diet <-
+  all %>%
+  filter(!is.na(max_svl) & !is.na(Diet)) %>%
+  group_by(Sex, Diet) %>%
+  summarise(n = n()) %>%
+  mutate(morph = rep("SVL", length(n))) %>%
+  mutate(covariate = rep("diet", length(n))) %>%
+  rename(category = Diet) %>%
+  dplyr::select(Sex, morph, covariate, category, n)
+
+svl_arboreal <-
+  all %>%
+  filter(!is.na(max_svl) & !is.na(arboreal)) %>%
+  group_by(Sex, arboreal) %>%
+  summarise(n = n()) %>%
+  mutate(morph = rep("SVL", length(n))) %>%
+  mutate(covariate = rep("arboreal", length(n))) %>%
+  rename(category = arboreal) %>%
+  dplyr::select(Sex, morph, covariate, category, n)
+
+svl_fossorial <-
+  all %>%
+  filter(!is.na(max_svl) & !is.na(fossorial)) %>%
+  group_by(Sex, fossorial) %>%
+  summarise(n = n()) %>%
+  mutate(morph = rep("SVL", length(n))) %>%
+  mutate(covariate = rep("fossorial", length(n))) %>%
+  rename(category = fossorial) %>%
+  dplyr::select(Sex, morph, covariate, category, n)
+  
+hw_diet <-
+  all %>%
+  filter(!is.na(max_hw) & !is.na(Diet)) %>%
+  group_by(Sex, Diet) %>%
+  summarise(n = n()) %>%
+  mutate(morph = rep("HW", length(n))) %>%
+  mutate(covariate = rep("diet", length(n))) %>%
+  rename(category = Diet) %>%
+  dplyr::select(Sex, morph, covariate, category, n)
+
+hw_arboreal <-
+  all %>%
+  filter(!is.na(max_hw) & !is.na(arboreal)) %>%
+  group_by(Sex, arboreal) %>%
+  summarise(n = n()) %>%
+  mutate(morph = rep("HW", length(n))) %>%
+  mutate(covariate = rep("arboreal", length(n))) %>%
+  rename(category = arboreal) %>%
+  dplyr::select(Sex, morph, covariate, category, n)
+
+hw_fossorial <-
+  all %>%
+  filter(!is.na(max_hw) & !is.na(fossorial)) %>%
+  group_by(Sex, fossorial) %>%
+  summarise(n = n()) %>%
+  mutate(morph = rep("HW", length(n))) %>%
+  mutate(covariate = rep("fossorial", length(n))) %>%
+  rename(category = fossorial) %>%
+  dplyr::select(Sex, morph, covariate, category, n)
+
+hl_diet <-
+  all %>%
+  filter(!is.na(max_hl) & !is.na(Diet)) %>%
+  group_by(Sex, Diet) %>%
+  summarise(n = n()) %>%
+  mutate(morph = rep("HL", length(n))) %>%
+  mutate(covariate = rep("diet", length(n))) %>%
+  rename(category = Diet) %>%
+  dplyr::select(Sex, morph, covariate, category, n)
+
+hl_arboreal <-
+  all %>%
+  filter(!is.na(max_hl) & !is.na(arboreal)) %>%
+  group_by(Sex, arboreal) %>%
+  summarise(n = n()) %>%
+  mutate(morph = rep("HL", length(n))) %>%
+  mutate(covariate = rep("arboreal", length(n))) %>%
+  rename(category = arboreal) %>%
+  dplyr::select(Sex, morph, covariate, category, n)
+
+hl_fossorial <-
+  all %>%
+  filter(!is.na(max_hl) & !is.na(fossorial)) %>%
+  group_by(Sex, fossorial) %>%
+  summarise(n = n()) %>%
+  mutate(morph = rep("HL", length(n))) %>%
+  mutate(covariate = rep("fossorial", length(n))) %>%
+  rename(category = fossorial) %>%
+  dplyr::select(Sex, morph, covariate, category, n)
+
+hh_diet <-
+  all %>%
+  filter(!is.na(max_hh) & !is.na(Diet)) %>%
+  group_by(Sex, Diet) %>%
+  summarise(n = n()) %>%
+  mutate(morph = rep("HH", length(n))) %>%
+  mutate(covariate = rep("diet", length(n))) %>%
+  rename(category = Diet) %>%
+  dplyr::select(Sex, morph, covariate, category, n)
+
+hh_arboreal <-
+  all %>%
+  filter(!is.na(max_hh) & !is.na(arboreal)) %>%
+  group_by(Sex, arboreal) %>%
+  summarise(n = n()) %>%
+  mutate(morph = rep("HH", length(n))) %>%
+  mutate(covariate = rep("arboreal", length(n))) %>%
+  rename(category = arboreal) %>%
+  dplyr::select(Sex, morph, covariate, category, n)
+
+hh_fossorial <-
+  all %>%
+  filter(!is.na(max_hh) & !is.na(fossorial)) %>%
+  group_by(Sex, fossorial) %>%
+  summarise(n = n()) %>%
+  mutate(morph = rep("HH", length(n))) %>%
+  mutate(covariate = rep("fossorial", length(n))) %>%
+  rename(category = fossorial) %>%
+  dplyr::select(Sex, morph, covariate, category, n)
+
+# combine
+
+all_counts <- rbind(svl_diet, svl_arboreal, svl_fossorial,
+                    hw_diet, hw_arboreal, hw_fossorial,
+                    hl_diet, hl_arboreal, hl_fossorial,
+                    hh_diet, hh_arboreal, hh_fossorial)
+
+all_counts
+
+write_csv(all_counts, path = here("outputs/species-in-each-analysis.csv"))
+```
