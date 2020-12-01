@@ -108,6 +108,11 @@ bfdata1 <-
                            TRUE ~ HH.SD)) %>%
   mutate(LJL.SD = case_when(is.na(LJL.SD) & !is.na(LJL.SE) ~ se2sd(LJL.SE, SSM),
                            TRUE ~ LJL.SD)) %>%
+# Make acrodont variable
+  mutate(acrodont = case_when(HigherTaxonomy == "Acrodonta" |
+                              HigherTaxonomy == "Rhynchocephalia" ~ "Acrodont",
+                              HigherTaxonomy != "Acrodonta" &
+                              HigherTaxonomy != "Rhynchocephalia" ~ "Pleurodont")) %>%
   # Add a column that says how many NAs each row has
   mutate(number_NAs = rowSums(is.na(.)))
 
@@ -161,8 +166,11 @@ ecodata1 <-
                               Lifestyle != "Arboreal" & Lifestyle != "Arboreal/Saxicolous" &
                                 Lifestyle != "Arboreal/Semi-Aquatic" & Lifestyle != "Arboreal/Terrestrial"  &
                                 Lifestyle != "Arboreal/Terrestrial/Saxicolous"  ~ "Other")) %>%
-  mutate(fossorial = case_when(Lifestyle == "Fossorial"  | Lifestyle == "Terrestrial/Fossorial" ~ "Fossorial",
-                              Lifestyle != "Fossorial" & Lifestyle != "Terrestrial/Fossorial" ~ "Other"))
+   mutate(arboreal_strict = case_when(Lifestyle == "Arboreal"  ~ "Arboreal", Lifestyle != "Arboreal" ~ "Other")) %>%
+   mutate(fossorial = case_when(Lifestyle == "Fossorial"  | Lifestyle == "Terrestrial/Fossorial" ~ "Fossorial",
+                              Lifestyle != "Fossorial" & Lifestyle != "Terrestrial/Fossorial" ~ "Other")) %>%
+   mutate(fossorial_strict = case_when(Lifestyle == "Fossorial"  ~ "Fossorial",
+                              Lifestyle != "Fossorial" ~ "Other"))
 ```
 
 Combine the two datasets
@@ -210,9 +218,9 @@ max_bf <-
    distinct(BinomialReptileDatabase, .keep_all = TRUE) %>%
   
    # Select columns we want
-   dplyr::select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy,  tips,
+   dplyr::select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, tips,
           SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl,
-          arboreal, fossorial, Diet)
+          arboreal, fossorial, Diet, acrodont, arboreal_strict, fossorial_strict)
 
 # Look at it
 max_bf
@@ -246,7 +254,7 @@ max_bf_males <-
    # Select columns we want
    dplyr::select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy,  tips,
           SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl,
-          arboreal, fossorial, Diet)
+          arboreal, fossorial, Diet, acrodont, arboreal_strict, fossorial_strict)
 ```    
 
 ### 3. max_bf_females
@@ -278,7 +286,7 @@ max_bf_females <-
    # Select columns we want
    dplyr::select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy,  tips,
           SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl,
-          arboreal, fossorial, Diet)
+          arboreal, fossorial, Diet, acrodont, arboreal_strict, fossorial_strict)
 ```
 
 ### 4.  max_bf_sd
@@ -304,7 +312,7 @@ max_bf_sd <-
    # Select columns we want
     dplyr::select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy,  tips,
            SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl,
-          arboreal, fossorial, Diet)
+          arboreal, fossorial, Diet, acrodont, arboreal_strict, fossorial_strict)
 
 # Look at it
 max_bf_sd 
@@ -336,7 +344,7 @@ max_bf_sd_males <-
    # Select columns we want
     dplyr::select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, tips,
            SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl,
-          arboreal, fossorial, Diet)
+          arboreal, fossorial, Diet, acrodont, arboreal_strict, fossorial_strict)
 ```
 
 ### 6. max_bf_sd_females
@@ -363,7 +371,7 @@ max_bf_sd_females <-
    # Select columns we want
     dplyr::select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, tips,
            SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl,
-          arboreal, fossorial, Diet)
+          arboreal, fossorial, Diet, acrodont, arboreal_strict, fossorial_strict)
 ```
   
 Write each dataset to csv for further analyses
