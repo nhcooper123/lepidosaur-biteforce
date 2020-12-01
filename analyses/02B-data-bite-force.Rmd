@@ -14,6 +14,7 @@ library(ggtree)
 library(knitr)
 library(ggstance)
 library(patchwork)
+library(here)
 
 # Helper functions for plotting
 remove_y <- 
@@ -86,9 +87,9 @@ family_bf1 <-
             SeBF = round(sd(log(max_bf))/sqrt(n()), digits = 3),
             n())
 
-kable(family_bf1, digits = 3)
+family_bf1
 
-write_csv(family_bf1, path = here("tables/bite-force-by-family.csv"))
+#write_csv(family_bf1, path = here("tables/bite-force-by-family.csv"))
 ```
 
 ```{r}
@@ -211,7 +212,7 @@ dietplot <-
   scale_colour_manual(values = sf_colours) +
   coord_flip() +
   theme_bw(base_size = 14) +
-  xlab("diet") +
+  xlab("") +
   ylab("ln(bite-force) (N)") + 
   ylim(-3, 7) +
   theme(legend.position = "right", legend.title = element_blank()) +
@@ -249,7 +250,45 @@ arbplot <-
   scale_colour_manual(values = sf_colours) +
   coord_flip() +
   theme_bw(base_size = 14) +
-  xlab("arboreal") +
+  xlab("") +
+  ylab("ln(bite-force) (N)") + 
+  ylim(-3, 7) +
+  theme(legend.position = "right", legend.title = element_blank()) +
+  labs(tag = "C") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12))
+```
+
+Bite force for strict arboreality
+```{r}
+arb_strict_bf1 <-
+  ds1 %>%
+  filter(!is.na(arboreal_strict)) %>%
+  group_by(arboreal_strict) %>%
+  summarise(MeanBF = round(mean(log(max_bf)), digits = 3),
+            SeBF = round(sd(log(max_bf))/sqrt(n()), digits = 3),
+            n())
+
+arb_strict_bf1
+
+#write_csv(arb_strict_bf1, path = here("tables/bite-force-by-arboreal_strict.csv"))
+```
+
+```{r}
+# Remove NAs
+ds1_arb_strict <- filter(ds1, !is.na(arboreal_strict))
+
+arbplot_strict <-
+  ggplot(ds1_arb_strict, aes(y = log(max_bf), x = arboreal_strict)) + 
+  geom_jitter(alpha = 0.5, width = 0.2) +
+  geom_point(data = arb_strict_bf1, aes(y = MeanBF), size = 3, col = "red") +
+  geom_errorbar(data = arb_strict_bf1, 
+                aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
+                show.legend = FALSE, width = 0.2, col = "red") +
+  scale_colour_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  xlab("") +
   ylab("ln(bite-force) (N)") + 
   ylim(-3, 7) +
   theme(legend.position = "right", legend.title = element_blank()) +
@@ -287,7 +326,7 @@ fosplot <-
   scale_colour_manual(values = sf_colours) +
   coord_flip() +
   theme_bw(base_size = 14) +
-  xlab("fossorial") +
+  xlab("") +
   ylab("ln(bite-force) (N)") + 
   ylim(-3, 7) +
   theme(legend.position = "right", legend.title = element_blank()) +
@@ -296,13 +335,90 @@ fosplot <-
         axis.title = element_text(size = 12))
 ```
 
+Bite force for strict fossoriality
+```{r}
+fos_strict_bf1 <-
+  ds1 %>%
+  filter(!is.na(fossorial_strict)) %>%
+  group_by(fossorial_strict) %>%
+  summarise(MeanBF = round(mean(log(max_bf)), digits = 3),
+            SeBF = round(sd(log(max_bf))/sqrt(n()), digits = 3),
+            n())
+
+fos_strict_bf1
+
+#write_csv(arb_bf1, path = here("tables/bite-force-by-fossorial.csv"))
+```
+
+```{r}
+# Remove NAs
+ds1_fos_strict <- filter(ds1, !is.na(fossorial_strict))
+
+fosplot_strict <-
+  ggplot(ds1_fos_strict, aes(y = log(max_bf), x = fossorial_strict)) + 
+  geom_jitter(alpha = 0.5, width = 0.2) +
+  geom_point(data = fos_strict_bf1, aes(y = MeanBF), size = 3, col = "red") +
+  geom_errorbar(data = fos_strict_bf1, 
+                aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
+                show.legend = FALSE, width = 0.2, col = "red") +
+  scale_colour_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  xlab("") +
+  ylab("ln(bite-force) (N)") + 
+  ylim(-3, 7) +
+  theme(legend.position = "right", legend.title = element_blank()) +
+  labs(tag = "D") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12))
+```
+
+Bite force by tooth attachment
+
+```{r}
+acrodont_bf1 <-
+  ds1 %>%
+  filter(!is.na(acrodont)) %>%
+  group_by(acrodont) %>%
+  summarise(MeanBF = round(mean(log(max_bf)), digits = 3),
+            SeBF = round(sd(log(max_bf))/sqrt(n()), digits = 3),
+            n())
+
+acrodont_bf1
+
+#write_csv(acrodont_bf1, path = here("tables/bite-force-by-acrodont.csv"))
+```
+
+```{r}
+#
+ds1_acrodont <- filter(ds1, !is.na(acrodont))
+
+acrodontplot <-
+  ggplot(ds1_acrodont, aes(y = log(max_bf), x = acrodont)) + 
+  geom_jitter(alpha = 0.5, width = 0.2) +
+  geom_point(data = acrodont_bf1, aes(y = MeanBF), size = 3, col = "red") +
+  geom_errorbar(data = acrodont_bf1, 
+                aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
+                show.legend = FALSE, width = 0.2, col = "red") +
+  scale_colour_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  xlab("") +
+  ylab("ln(bite-force) (N)") + 
+  ylim(-3, 7) +
+  theme(legend.position = "right", legend.title = element_blank()) +
+  labs(tag = "E") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12))
+```
+
 ```{r}
 # Plot all together
 
-higherplot + (dietplot / arbplot / fosplot)
+higherplot + (dietplot / arbplot / fosplot/ acrodontplot)
 
 # Save plot
-#ggsave(here("figures/bite-force-by-ecology.png"), height = 5)
+#ggsave(here("figures/bite-force-by-ecology.png"), height = 7)
 ```
 
 
