@@ -415,10 +415,10 @@ acrodontplot <-
 ```{r}
 # Plot all together
 
-higherplot + (dietplot / arbplot / fosplot/ acrodontplot)
+higherplot + (dietplot/arbplot) + (fosplot/ acrodontplot)
 
 # Save plot
-#ggsave(here("figures/bite-force-by-ecology.png"), height = 7)
+#ggsave(here("figures/bite-force-by-ecology.png"), width = 10, height = 5)
 ```
 
 
