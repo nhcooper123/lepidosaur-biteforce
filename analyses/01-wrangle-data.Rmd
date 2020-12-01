@@ -160,17 +160,14 @@ Expand the ecological data to get more useful habitat categories
 ```{r}
 ecodata1 <- 
   ecodata %>%
-  mutate(arboreal = case_when(Lifestyle == "Arboreal" | Lifestyle == "Arboreal/Saxicolous" |
-                                Lifestyle == "Arboreal/Semi-Aquatic" | Lifestyle == "Arboreal/Terrestrial"  |
-                                Lifestyle == "Arboreal/Terrestrial/Saxicolous"  ~ "Arboreal",
-                              Lifestyle != "Arboreal" & Lifestyle != "Arboreal/Saxicolous" &
-                                Lifestyle != "Arboreal/Semi-Aquatic" & Lifestyle != "Arboreal/Terrestrial"  &
-                                Lifestyle != "Arboreal/Terrestrial/Saxicolous"  ~ "Other")) %>%
-   mutate(arboreal_strict = case_when(Lifestyle == "Arboreal"  ~ "Arboreal", Lifestyle != "Arboreal" ~ "Other")) %>%
-   mutate(fossorial = case_when(Lifestyle == "Fossorial"  | Lifestyle == "Terrestrial/Fossorial" ~ "Fossorial",
-                              Lifestyle != "Fossorial" & Lifestyle != "Terrestrial/Fossorial" ~ "Other")) %>%
-   mutate(fossorial_strict = case_when(Lifestyle == "Fossorial"  ~ "Fossorial",
-                              Lifestyle != "Fossorial" ~ "Other"))
+  mutate(arboreal = case_when(Lifestyle == "Arboreal"  ~ "Arboreal", 
+                              Lifestyle != "Arboreal" ~ "Other")) %>%
+  mutate(fossorial = case_when(Lifestyle == "Fossorial"  ~ "Fossorial", 
+                               Lifestyle != "Fossorial" ~ "Other")) %>%
+  mutate(saxicolous = case_when(Lifestyle == "Arboreal/Saxicolous"  | Lifestyle == "Arboreal/Terrestrial/Saxicolous" |
+                                Lifestyle == "Saxicolous" | Lifestyle == "Terrestrial/Saxicolous"  ~ "Saxicolous", 
+                                Lifestyle != "Arboreal/Saxicolous"  & Lifestyle != "Arboreal/Terrestrial/Saxicolous" &
+                                Lifestyle != "Saxicolous" & Lifestyle != "Terrestrial/Saxicolous"  ~ "Other"))
 ```
 
 Combine the two datasets
@@ -220,7 +217,7 @@ max_bf <-
    # Select columns we want
    dplyr::select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, tips,
           SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl,
-          arboreal, fossorial, Diet, acrodont, arboreal_strict, fossorial_strict)
+          arboreal, fossorial, Diet, acrodont, saxicolous)
 
 # Look at it
 max_bf
@@ -254,7 +251,7 @@ max_bf_males <-
    # Select columns we want
    dplyr::select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy,  tips,
           SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl,
-          arboreal, fossorial, Diet, acrodont, arboreal_strict, fossorial_strict)
+          arboreal, fossorial, Diet, acrodont, saxicolous)
 ```    
 
 ### 3. max_bf_females
@@ -286,7 +283,7 @@ max_bf_females <-
    # Select columns we want
    dplyr::select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy,  tips,
           SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl,
-          arboreal, fossorial, Diet, acrodont, arboreal_strict, fossorial_strict)
+          arboreal, fossorial, Diet, acrodont, saxicolous)
 ```
 
 ### 4.  max_bf_sd
@@ -312,7 +309,7 @@ max_bf_sd <-
    # Select columns we want
     dplyr::select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy,  tips,
            SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl,
-          arboreal, fossorial, Diet, acrodont, arboreal_strict, fossorial_strict)
+          arboreal, fossorial, Diet, acrodont, saxicolous)
 
 # Look at it
 max_bf_sd 
@@ -344,7 +341,7 @@ max_bf_sd_males <-
    # Select columns we want
     dplyr::select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, tips,
            SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl,
-          arboreal, fossorial, Diet, acrodont, arboreal_strict, fossorial_strict)
+          arboreal, fossorial, Diet, acrodont, saxicolous)
 ```
 
 ### 6. max_bf_sd_females
@@ -371,16 +368,16 @@ max_bf_sd_females <-
    # Select columns we want
     dplyr::select(BinomialReptileDatabase, Sex, Family, HigherTaxonomy, tips,
            SSM, SSBF, max_bf, max_bm, max_svl, max_hl, max_hw, max_hh, max_ljl,
-          arboreal, fossorial, Diet, acrodont, arboreal_strict, fossorial_strict)
+          arboreal, fossorial, Diet, acrodont, saxicolous)
 ```
   
 Write each dataset to csv for further analyses
 ```{r}
-write_csv(bfdata_all, path = here("data/biteforce-ecology-data.csv"))
-write_csv(max_bf, path = here("data/max_bf.csv"))
-write_csv(max_bf_males, path = here("data/max_bf_males.csv"))
-write_csv(max_bf_females, path = here("data/max_bf_females.csv"))
-write_csv(max_bf_sd, path = here("data/max_bf_sd.csv"))
-write_csv(max_bf_sd_males, path = here("data/max_bf_sd_males.csv"))
-write_csv(max_bf_sd_females, path = here("data/max_bf_sd_females.csv"))
+write_csv(bfdata_all, file = here("data/biteforce-ecology-data.csv"))
+write_csv(max_bf, file = here("data/max_bf.csv"))
+write_csv(max_bf_males, file = here("data/max_bf_males.csv"))
+write_csv(max_bf_females, file = here("data/max_bf_females.csv"))
+write_csv(max_bf_sd, file = here("data/max_bf_sd.csv"))
+write_csv(max_bf_sd_males, file = here("data/max_bf_sd_males.csv"))
+write_csv(max_bf_sd_females, file = here("data/max_bf_sd_females.csv"))
 ```
