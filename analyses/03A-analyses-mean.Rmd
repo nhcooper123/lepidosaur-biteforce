@@ -917,7 +917,7 @@ output <- write_output(model43, dataset = "mean", sex = "male", tree = "full",
 ```{r}
 # Fit model
 model44 <- pgls(log(max_bf) ~ log(max_hw) * as.factor(acrodont), 
-                data = lepidosaur, lambda = "ML")
+                data = lepidosaur, lambda = "ML", bounds = list(lambda = c(0.1,1)))
 
 # Check model diagnostics
 plot(model44)
@@ -1146,7 +1146,7 @@ output <- write_output(model56, dataset = "mean", sex = "all", tree = "full",
 ```{r}
 # Fit model
 model57 <- pgls(log(max_bf) ~ log(max_hw) * as.factor(saxicolous), data = lepidosaur_females,
-                   lambda = "ML")
+                   lambda = "ML", bounds = list(lambda = c(0.1,1)))
 
 # Check model diagnostics
 plot(model57)
