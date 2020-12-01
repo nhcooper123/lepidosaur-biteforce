@@ -15,6 +15,7 @@ library(ggtree)
 library(knitr)
 library(ggstance)
 library(patchwork)
+library(here)
 
 # Helper functions for plotting
 remove_y <- 
@@ -30,6 +31,9 @@ remove_x <-
 # Colour palette
 sf_colours <- c("#ffc100", "#47b881", "brown", "#5588ff", 
                 "#efbbff", "#ff7400", "#090088", "#800080")
+
+sf_colours_noS <- c("#ffc100", "#47b881", "brown", "#5588ff", 
+                "#efbbff", "#ff7400", "#800080")
 
 # "Acrodonta"    #ffc100 = yellow   
 # "Anguimorpha"     #47b881 = green
@@ -67,13 +71,15 @@ family_ds <-
 family_ds[is.na(family_ds)] <- 0
 
 # Print
-kable(family_ds, digits = 3)
+family_ds
+
+#write_csv(family_ds, here("outputs/family-coverage.csv"))
 ```
 
 Next let's look at the numbers per higher taxonomic group, and how the % coverage looks for each family relative to the studies and to the taxonomic distributions...
 
 ```{r}
-# Summarise the taxonomy data so it gives numbers per superfamily not family
+# Summarise the taxonomy data so it gives numbers per higher taxonomic grouping not family
 taxa_higher <-
   taxa %>%
   group_by(HigherTaxonomy) %>%
@@ -92,17 +98,24 @@ higher_ds <-
 higher_ds[is.na(higher_ds)] <- 0
 
 # Print
-kable(higher_ds, digits = 3)
+higher_ds
+
+#write_csv(higher_ds, here("outputs/higher-taxonomy-coverage.csv"))
 ```
 
 ### Plots of distributions
 
 Family level plots
 ```{r}
+# Exclude sphenodon
+family_ds <-
+  family_ds %>%
+  filter(Family != "Sphenodontidae")
+
 p1 <- 
   ggplot(family_ds, aes(y = nBF, x = Family, fill = HigherTaxonomy)) + 
   geom_bar(position = position_stack(reverse = TRUE), stat = "identity") +
-  scale_fill_manual(values = sf_colours) +
+  scale_fill_manual(values = sf_colours_noS) +
   coord_flip() +
   theme_bw(base_size = 14) +
   #scale_y_continuous(breaks=seq(0,45,5)) +
@@ -110,13 +123,10 @@ p1 <-
   ylab("species (n)") +
   theme(legend.position = "none")
 
-# To aid plotting switch 100 for 0 in Sphenodon
-family_ds[family_ds == 100] <- 0
-
 p2 <-
   ggplot(family_ds, aes(y = percent_taxa, x = Family, fill = HigherTaxonomy)) + 
   geom_bar(position = position_stack(reverse = TRUE), stat = "identity") +
-  scale_fill_manual(values = sf_colours) +
+  scale_fill_manual(values = sf_colours_noS) +
   coord_flip() +
   theme_bw(base_size = 14) +
   #scale_y_continuous(breaks=seq(0,50,5)) +
@@ -128,15 +138,20 @@ p2 <-
 p1 + p2
 
 # Save plot
-#ggsave(here("figures/family-level-data-coverage.png"), height = 7)
+#ggsave(here("figures/family-level-data-coverage-noS.png"), height = 7)
 ```
 
 Higher taxonomy level plots
 ```{r}
+# Exclude sphenodon
+higher_ds <-
+  higher_ds %>%
+  filter(HigherTaxonomy != "Rhynchocephalia")
+
 p1 <- 
   ggplot(higher_ds, aes(y = nBF, x = HigherTaxonomy, fill = HigherTaxonomy)) + 
   geom_bar(position = position_stack(reverse = TRUE), stat = "identity") +
-  scale_fill_manual(values = sf_colours) +
+  scale_fill_manual(values = sf_colours_noS) +
   coord_flip() +
   theme_bw(base_size = 14) +
   ylim(0, 80) +
@@ -151,7 +166,7 @@ higher_ds[higher_ds == 100] <- 0
 p2 <-
   ggplot(higher_ds, aes(y = percent_taxa, x = HigherTaxonomy, fill = HigherTaxonomy)) + 
   geom_bar(position = position_stack(reverse = TRUE), stat = "identity") +
-  scale_fill_manual(values = sf_colours) +
+  scale_fill_manual(values = sf_colours_noS) +
   coord_flip() +
   theme_bw(base_size = 14) +
   ylim(0,10) +
@@ -163,7 +178,7 @@ p2 <-
 p1 + p2
 
 # Save plot
-# ggsave(here("figures/higher-level-data-coverage.png"), height = 5)
+# ggsave(here("figures/higher-level-data-coverage-noS.png"), height = 5)
 
 ```
 
