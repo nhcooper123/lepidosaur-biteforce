@@ -31,7 +31,6 @@ max_bf_males <- data.frame(max_bf_males)
 
 Read in phylogeny
 ```{r}
-tree <- read.nexus(here("data/lepidosaur-tree.nex"))
 tree_plus <- read.nexus(here("data/lepidosaur-tree-plus.nex"))
 ```
 
@@ -64,12 +63,13 @@ lepidosaur_males <- comparative.data(phy = tree_plus, data = max_bf_males,
 
 Set up output files
 ```{r}
-output <- data.frame(array(dim = c(40, 17)))
+output <- data.frame(array(dim = c(64, 20)))
 names(output) <- c("dataset", "sex", "tree", "morph", "covariate", "lambda", "residual_df", 
                    "df_morph", "F_morph", "p_morph", 
                    "df_covariate", "F_covariate", "p_covariate", 
                    "df_morphxcovariate", "F_morphxcovariate", "p_morphxcovariate", 
-                   "adj.r2")
+                   "adj.r2", "bonf_p_morph", "bonf_p_covariate", 
+                   "bonf_p_morphxcovariate")
 
 # Short function to help write output files
 write_output <- function(model, dataset, sex, tree, morph, covariate, n){
@@ -358,7 +358,7 @@ output <- write_output(model14, dataset = "mean", sex = "all", tree = "full",
 
 ### SVL + HigherTaxonomy
 
-Rhynchocephalia and Gekkota do nto have enough species to fit the model so we need to remove them
+Rhynchocephalia and Gekkota do not have enough species to fit the model so we need to remove them
 
 ```{r}
 max_bf_x <- 
@@ -857,6 +857,444 @@ summary(model40)
 output <- write_output(model40, dataset = "mean", sex = "male", tree = "full",
                        morph = "HL", covariate = "taxonomy", n = 40)
 ```
+
+
+### ACRODONTY
+
+# SVL
+```{r}
+# Fit model
+model41 <- pgls(log(max_bf) ~ log(max_svl) * as.factor(acrodont), 
+                data = lepidosaur, lambda = "ML")
+
+# Check model diagnostics
+plot(model41)
+
+# Look at outputs
+anova(model41)
+summary(model41)
+
+# Save outputs
+output <- write_output(model41, dataset = "mean", sex = "all", tree = "full",
+                       morph = "SVL", covariate = "acrodont", n = 41)
+```
+
+```{r}
+# Fit model
+model42 <- pgls(log(max_bf) ~ log(max_svl) * as.factor(acrodont), data = lepidosaur_females,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model42)
+
+# Look at outputs
+anova(model42)
+summary(model42)
+
+# Save outputs
+output <- write_output(model42, dataset = "mean", sex = "female", tree = "full",
+                       morph = "SVL", covariate = "acrodont", n = 42)
+```
+
+```{r}
+# Fit model
+model43 <- pgls(log(max_bf) ~ log(max_svl) * as.factor(acrodont), data = lepidosaur_males,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model43)
+
+# Look at outputs
+anova(model43)
+summary(model43)
+
+# Save outputs
+output <- write_output(model43, dataset = "mean", sex = "male", tree = "full",
+                       morph = "SVL", covariate = "acrodont", n = 43)
+```
+
+# HW 
+```{r}
+# Fit model
+model44 <- pgls(log(max_bf) ~ log(max_hw) * as.factor(acrodont), 
+                data = lepidosaur, lambda = "ML")
+
+# Check model diagnostics
+plot(model44)
+
+# Look at outputs
+anova(model44)
+summary(model44)
+
+# Save outputs
+output <- write_output(model44, dataset = "mean", sex = "all", tree = "full",
+                       morph = "HW", covariate = "acrodont", n = 44)
+```
+
+```{r}
+# Fit model
+model45 <- pgls(log(max_bf) ~ log(max_hw) * as.factor(acrodont), data = lepidosaur_females,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model45)
+
+# Look at outputs
+anova(model45)
+summary(model45)
+
+# Save outputs
+output <- write_output(model45, dataset = "mean", sex = "female", tree = "full",
+                       morph = "HW", covariate = "acrodont", n = 45)
+```
+
+```{r}
+# Fit model
+model46 <- pgls(log(max_bf) ~ log(max_hw) * as.factor(acrodont), data = lepidosaur_males,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model46)
+
+# Look at outputs
+anova(model46)
+summary(model46)
+
+# Save outputs
+output <- write_output(model46, dataset = "mean", sex = "male", tree = "full",
+                       morph = "HW", covariate = "acrodont", n = 46)
+```
+
+# HH
+
+```{r}
+# Fit model
+model47 <- pgls(log(max_bf) ~ log(max_hh) * as.factor(acrodont), 
+                data = lepidosaur, lambda = "ML")
+
+# Check model diagnostics
+plot(model47)
+
+# Look at outputs
+anova(model47)
+summary(model47)
+
+# Save outputs
+output <- write_output(model47, dataset = "mean", sex = "all", tree = "full",
+                       morph = "HH", covariate = "acrodont", n = 47)
+```
+
+```{r}
+# Fit model
+model48 <- pgls(log(max_bf) ~ log(max_hh) * as.factor(acrodont), data = lepidosaur_females,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model48)
+
+# Look at outputs
+anova(model48)
+summary(model48)
+
+# Save outputs
+output <- write_output(model48, dataset = "mean", sex = "female", tree = "full",
+                       morph = "HH", covariate = "acrodont", n = 48)
+```
+
+```{r}
+# Fit model
+model49 <- pgls(log(max_bf) ~ log(max_hh) * as.factor(acrodont), data = lepidosaur_males,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model49)
+
+# Look at outputs
+anova(model49)
+summary(model49)
+
+# Save outputs
+output <- write_output(model49, dataset = "mean", sex = "male", tree = "full",
+                       morph = "HH", covariate = "acrodont", n = 49)
+```
+
+# HL
+
+```{r}
+# Fit model
+model50 <- pgls(log(max_bf) ~ log(max_hl) * as.factor(acrodont), 
+                data = lepidosaur, lambda = "ML")
+
+# Check model diagnostics
+plot(model50)
+
+# Look at outputs
+anova(model50)
+summary(model50)
+
+# Save outputs
+output <- write_output(model50, dataset = "mean", sex = "all", tree = "full",
+                       morph = "HL", covariate = "acrodont", n = 50)
+```
+
+```{r}
+# Fit model
+model51 <- pgls(log(max_bf) ~ log(max_hl) * as.factor(acrodont), data = lepidosaur_females,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model51)
+
+# Look at outputs
+anova(model51)
+summary(model51)
+
+# Save outputs
+output <- write_output(model51, dataset = "mean", sex = "female", tree = "full",
+                       morph = "HL", covariate = "acrodont", n = 51)
+```
+
+```{r}
+# Fit model
+model52 <- pgls(log(max_bf) ~ log(max_hl) * as.factor(acrodont), data = lepidosaur_males,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model52)
+
+# Look at outputs
+anova(model52)
+summary(model52)
+
+# Save outputs
+output <- write_output(model52, dataset = "mean", sex = "male", tree = "full",
+                       morph = "HL", covariate = "acrodont", n = 52)
+```
+
+# SAXICOLOUS
+
+# SVL
+```{r}
+# Fit model
+model53 <- pgls(log(max_bf) ~ log(max_svl) * as.factor(saxicolous), 
+                data = lepidosaur, lambda = "ML")
+
+# Check model diagnostics
+plot(model53)
+
+# Look at outputs
+anova(model53)
+summary(model53)
+
+# Save outputs
+output <- write_output(model53, dataset = "mean", sex = "all", tree = "full",
+                       morph = "SVL", covariate = "saxicolous", n = 53)
+```
+
+```{r}
+# Fit model
+model54 <- pgls(log(max_bf) ~ log(max_svl) * as.factor(saxicolous), data = lepidosaur_females,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model54)
+
+# Look at outputs
+anova(model54)
+summary(model54)
+
+# Save outputs
+output <- write_output(model54, dataset = "mean", sex = "female", tree = "full",
+                       morph = "SVL", covariate = "saxicolous", n = 54)
+```
+
+```{r}
+# Fit model
+model55 <- pgls(log(max_bf) ~ log(max_svl) * as.factor(saxicolous), data = lepidosaur_males,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model55)
+
+# Look at outputs
+anova(model55)
+summary(model55)
+
+# Save outputs
+output <- write_output(model55, dataset = "mean", sex = "male", tree = "full",
+                       morph = "SVL", covariate = "saxicolous", n = 55)
+```
+
+# HW 
+```{r}
+# Fit model
+model56 <- pgls(log(max_bf) ~ log(max_hw) * as.factor(saxicolous), 
+                data = lepidosaur, lambda = "ML")
+
+# Check model diagnostics
+plot(model56)
+
+# Look at outputs
+anova(model56)
+summary(model56)
+
+# Save outputs
+output <- write_output(model56, dataset = "mean", sex = "all", tree = "full",
+                       morph = "HW", covariate = "saxicolous", n = 56)
+```
+
+```{r}
+# Fit model
+model57 <- pgls(log(max_bf) ~ log(max_hw) * as.factor(saxicolous), data = lepidosaur_females,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model57)
+
+# Look at outputs
+anova(model57)
+summary(model57)
+
+# Save outputs
+output <- write_output(model57, dataset = "mean", sex = "female", tree = "full",
+                       morph = "HW", covariate = "saxicolous", n = 57)
+```
+
+```{r}
+# Fit model
+model58 <- pgls(log(max_bf) ~ log(max_hw) * as.factor(saxicolous), data = lepidosaur_males,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model58)
+
+# Look at outputs
+anova(model58)
+summary(model58)
+
+# Save outputs
+output <- write_output(model58, dataset = "mean", sex = "male", tree = "full",
+                       morph = "HW", covariate = "saxicolous", n = 58)
+```
+
+# HH
+
+```{r}
+# Fit model
+model59 <- pgls(log(max_bf) ~ log(max_hh) * as.factor(saxicolous), 
+                data = lepidosaur, lambda = "ML")
+
+# Check model diagnostics
+plot(model59)
+
+# Look at outputs
+anova(model59)
+summary(model59)
+
+# Save outputs
+output <- write_output(model59, dataset = "mean", sex = "all", tree = "full",
+                       morph = "HH", covariate = "saxicolous", n = 59)
+```
+
+```{r}
+# Fit model
+model60 <- pgls(log(max_bf) ~ log(max_hh) * as.factor(saxicolous), data = lepidosaur_females,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model60)
+
+# Look at outputs
+anova(model60)
+summary(model60)
+
+# Save outputs
+output <- write_output(model60, dataset = "mean", sex = "female", tree = "full",
+                       morph = "HH", covariate = "saxicolous", n = 60)
+```
+
+```{r}
+# Fit model
+model61 <- pgls(log(max_bf) ~ log(max_hh) * as.factor(saxicolous), data = lepidosaur_males,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model61)
+
+# Look at outputs
+anova(model61)
+summary(model61)
+
+# Save outputs
+output <- write_output(model61, dataset = "mean", sex = "male", tree = "full",
+                       morph = "HH", covariate = "saxicolous", n = 61)
+```
+
+# HL
+
+```{r}
+# Fit model
+model62 <- pgls(log(max_bf) ~ log(max_hl) * as.factor(saxicolous), 
+                data = lepidosaur, lambda = "ML")
+
+# Check model diagnostics
+plot(model62)
+
+# Look at outputs
+anova(model62)
+summary(model62)
+
+# Save outputs
+output <- write_output(model62, dataset = "mean", sex = "all", tree = "full",
+                       morph = "HL", covariate = "saxicolous", n = 62)
+```
+
+```{r}
+# Fit model
+model63 <- pgls(log(max_bf) ~ log(max_hl) * as.factor(saxicolous), data = lepidosaur_females,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model63)
+
+# Look at outputs
+anova(model63)
+summary(model63)
+
+# Save outputs
+output <- write_output(model63, dataset = "mean", sex = "female", tree = "full",
+                       morph = "HL", covariate = "saxicolous", n = 63)
+```
+
+```{r}
+# Fit model
+model64 <- pgls(log(max_bf) ~ log(max_hl) * as.factor(saxicolous), data = lepidosaur_males,
+                   lambda = "ML")
+
+# Check model diagnostics
+plot(model64)
+
+# Look at outputs
+anova(model64)
+summary(model64)
+
+# Save outputs
+output <- write_output(model64, dataset = "mean", sex = "male", tree = "full",
+                       morph = "HL", covariate = "saxicolous", n = 64)
+```
+
+
+### Bonferonni!!!
+```{r}
+output
+
+"bonf_p_morph", "bonf_p_covariate", 
+                   "bonf_p_morphxcovariate"
+
+```
+
+
+
 
 Write all outputs to file
 
