@@ -194,7 +194,6 @@ diet_bf1 <-
 
 diet_bf1
 
-ds1_diet
 #write_csv(diet_bf1, path = here("tables/bite-force-by-diet.csv"))
 ```
 
@@ -259,44 +258,6 @@ arbplot <-
         axis.title = element_text(size = 12))
 ```
 
-Bite force for strict arboreality
-```{r}
-arb_strict_bf1 <-
-  ds1 %>%
-  filter(!is.na(arboreal_strict)) %>%
-  group_by(arboreal_strict) %>%
-  summarise(MeanBF = round(mean(log(max_bf)), digits = 3),
-            SeBF = round(sd(log(max_bf))/sqrt(n()), digits = 3),
-            n())
-
-arb_strict_bf1
-
-#write_csv(arb_strict_bf1, path = here("tables/bite-force-by-arboreal_strict.csv"))
-```
-
-```{r}
-# Remove NAs
-ds1_arb_strict <- filter(ds1, !is.na(arboreal_strict))
-
-arbplot_strict <-
-  ggplot(ds1_arb_strict, aes(y = log(max_bf), x = arboreal_strict)) + 
-  geom_jitter(alpha = 0.5, width = 0.2) +
-  geom_point(data = arb_strict_bf1, aes(y = MeanBF), size = 3, col = "red") +
-  geom_errorbar(data = arb_strict_bf1, 
-                aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
-                show.legend = FALSE, width = 0.2, col = "red") +
-  scale_colour_manual(values = sf_colours) +
-  coord_flip() +
-  theme_bw(base_size = 14) +
-  xlab("") +
-  ylab("ln(bite-force) (N)") + 
-  ylim(-3, 7) +
-  theme(legend.position = "right", legend.title = element_blank()) +
-  labs(tag = "C") +
-  theme(plot.tag = element_text(size = 12, face = "bold"),
-        axis.title = element_text(size = 12))
-```
-
 Bite force per fossoriality
 ```{r}
 fos_bf1 <-
@@ -309,7 +270,7 @@ fos_bf1 <-
 
 fos_bf1
 
-#write_csv(arb_bf1, path = here("tables/bite-force-by-fossorial.csv"))
+#write_csv(fos_bf1, path = here("tables/bite-force-by-fossorial.csv"))
 ```
 
 ```{r}
@@ -335,30 +296,36 @@ fosplot <-
         axis.title = element_text(size = 12))
 ```
 
-Bite force for strict fossoriality
+Bite force per saxicolous
 ```{r}
-fos_strict_bf1 <-
+sax_bf1 <-
   ds1 %>%
-  filter(!is.na(fossorial_strict)) %>%
-  group_by(fossorial_strict) %>%
+  # Relevel
+  mutate(saxicolous = relevel(as.factor(saxicolous), ref = "Saxicolous")) %>%
+  filter(!is.na(saxicolous)) %>%
+  group_by(saxicolous) %>%
   summarise(MeanBF = round(mean(log(max_bf)), digits = 3),
             SeBF = round(sd(log(max_bf))/sqrt(n()), digits = 3),
             n())
 
-fos_strict_bf1
+sax_bf1
 
-#write_csv(arb_bf1, path = here("tables/bite-force-by-fossorial.csv"))
+#write_csv(sax_bf1, path = here("tables/bite-force-by-saxicolous.csv"))
 ```
 
 ```{r}
 # Remove NAs
-ds1_fos_strict <- filter(ds1, !is.na(fossorial_strict))
+ds1_sax <- 
+  ds1 %>%
+  # Relevel
+  mutate(saxicolous = relevel(as.factor(saxicolous), ref = "Saxicolous")) %>%
+  filter(!is.na(saxicolous))
 
-fosplot_strict <-
-  ggplot(ds1_fos_strict, aes(y = log(max_bf), x = fossorial_strict)) + 
+saxplot <-
+  ggplot(ds1_sax, aes(y = log(max_bf), x = saxicolous)) + 
   geom_jitter(alpha = 0.5, width = 0.2) +
-  geom_point(data = fos_strict_bf1, aes(y = MeanBF), size = 3, col = "red") +
-  geom_errorbar(data = fos_strict_bf1, 
+  geom_point(data = sax_bf1, aes(y = MeanBF), size = 3, col = "red") +
+  geom_errorbar(data = sax_bf1, 
                 aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
                 show.legend = FALSE, width = 0.2, col = "red") +
   scale_colour_manual(values = sf_colours) +
@@ -368,13 +335,12 @@ fosplot_strict <-
   ylab("ln(bite-force) (N)") + 
   ylim(-3, 7) +
   theme(legend.position = "right", legend.title = element_blank()) +
-  labs(tag = "D") +
+  labs(tag = "E") +
   theme(plot.tag = element_text(size = 12, face = "bold"),
         axis.title = element_text(size = 12))
 ```
 
 Bite force by tooth attachment
-
 ```{r}
 acrodont_bf1 <-
   ds1 %>%
@@ -407,18 +373,18 @@ acrodontplot <-
   ylab("ln(bite-force) (N)") + 
   ylim(-3, 7) +
   theme(legend.position = "right", legend.title = element_blank()) +
-  labs(tag = "E") +
+  labs(tag = "F") +
   theme(plot.tag = element_text(size = 12, face = "bold"),
         axis.title = element_text(size = 12))
 ```
 
 ```{r}
 # Plot all together
-
-higherplot + (dietplot/arbplot) + (fosplot/ acrodontplot)
+higherplot + dietplot + arbplot + fosplot + saxplot + acrodontplot +
+  plot_layout(widths = c(2, 2), ncol = 2)
 
 # Save plot
-#ggsave(here("figures/bite-force-by-ecology.png"), width = 10, height = 5)
+#ggsave(here("figures/bite-force-by-ecology.png"), height = 7)
 ```
 
 
