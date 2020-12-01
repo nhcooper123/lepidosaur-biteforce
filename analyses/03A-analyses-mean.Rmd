@@ -363,7 +363,8 @@ Rhynchocephalia and Gekkota do not have enough species to fit the model so we ne
 ```{r}
 max_bf_x <- 
   max_bf %>%
-  filter(HigherTaxonomy != "Rhynchocephalia" & HigherTaxonomy != "Gekkota") %>%
+  filter(HigherTaxonomy != "Rhynchocephalia" & HigherTaxonomy != "Gekkota"
+         & HigherTaxonomy != "Anguimorpha") %>%
   data.frame()
 
 lepidosaur_x <- comparative.data(phy = tree_plus, data = max_bf_x, 
@@ -373,7 +374,8 @@ lepidosaur_x <- comparative.data(phy = tree_plus, data = max_bf_x,
 # females
 max_bf_females_x <- 
   max_bf_females %>%
-  filter(HigherTaxonomy != "Rhynchocephalia" & HigherTaxonomy != "Gekkota") %>%
+  filter(HigherTaxonomy != "Rhynchocephalia" & HigherTaxonomy != "Gekkota"
+         & HigherTaxonomy != "Anguimorpha" & HigherTaxonomy != "Scincoidea") %>%
   data.frame()
 
 lepidosaur_females_x <- comparative.data(phy = tree_plus, data = max_bf_females_x, 
@@ -383,7 +385,7 @@ lepidosaur_females_x <- comparative.data(phy = tree_plus, data = max_bf_females_
 # males
 max_bf_males_x <- 
   max_bf_males %>%
-  filter(HigherTaxonomy != "Rhynchocephalia" & HigherTaxonomy != "Gekkota") %>%
+  filter(HigherTaxonomy != "Rhynchocephalia" & HigherTaxonomy != "Gekkota"&     HigherTaxonomy != "Anguimorpha" & HigherTaxonomy != "Scincoidea") %>%
   data.frame()
 
 lepidosaur_males_x <- comparative.data(phy = tree_plus, data = max_bf_males_x, 
@@ -442,7 +444,7 @@ output <- write_output(model17, dataset = "mean", sex = "male", tree = "full",
                        morph = "SVL", covariate = "taxonomy", n = 17)
 ```
 
-### HW + FOSSORIAL
+### HW + taxonomy
 
 ```{r}
 # Fit model
@@ -805,7 +807,7 @@ output <- write_output(model37, dataset = "mean", sex = "male", tree = "full",
                        morph = "HH", covariate = "taxonomy", n = 37)
 ```
 
-### HL + FOSSORIAL
+### HL
 
 ```{r}
 # Fit model
@@ -1286,18 +1288,13 @@ output <- write_output(model64, dataset = "mean", sex = "male", tree = "full",
 
 ### Bonferonni!!!
 ```{r}
-output
-
-"bonf_p_morph", "bonf_p_covariate", 
-                   "bonf_p_morphxcovariate"
-
+output$bonf_p_morph <- p.adjust(output$p_morph)
+output$bonf_p_covariate <- p.adjust(output$p_covariate)
+output$bonf_p_morphxcovariate <- p.adjust(output$p_morphxcovariate)
 ```
-
-
-
 
 Write all outputs to file
 
 ```{r}
-#write_csv(output, path = here("outputs/pgls-results.csv"))
+#write_csv(output, file = here("outputs/pgls-results.csv"))
 ```
