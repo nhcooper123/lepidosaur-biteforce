@@ -44,25 +44,22 @@ sf_colours <- c("#ffc100", "#47b881", "#5588ff",
 # "Scincoidea" #800080 = purple
 
 # Diet
-d_colours <- c("#56B4E9", "#009E73", "#D55E00")
+diet_colours <- c("#D55E00", "#009E73", "#56B4E9")
 
-# Diet
-a_colours <- c("#00783e", "grey")
+# Arboreal
+arb_colours <- c("#00783e", "grey")
 
 # Fossorial
-f_colours <- c("#663300", "grey")
+foss_colours <- c("#663300", "grey")
+
+# Acrodont
+a_colours <- c("#ffc100", "grey")
 ```
 
 Read in the data and ensure these are dataframes.
 ```{r, message = FALSE}
 max_bf <- read_csv(here("data/max_bf.csv"))
 max_bf <- data.frame(max_bf)
-
-max_bf_females <- read_csv(here("data/max_bf_females.csv"))
-max_bf_females <- data.frame(max_bf_females)
-
-max_bf_males <- read_csv(here("data/max_bf_males.csv"))
-max_bf_males <- data.frame(max_bf_males)
 ```
 
 Read in phylogeny
@@ -73,14 +70,6 @@ tree_plus <- read.nexus(here("data/lepidosaur-tree-plus.nex"))
 Create comparative data objects with phylogeny and data combined
 ```{r}
 lepidosaur <- comparative.data(phy = tree_plus, data = max_bf, 
-                               names.col = tips, vcv = TRUE,
-                               warn.dropped = FALSE, na.omit = FALSE)
-# Females only
-lepidosaur_females <- comparative.data(phy = tree_plus, data = max_bf_females, 
-                               names.col = tips, vcv = TRUE,
-                               warn.dropped = FALSE, na.omit = FALSE)
-# Males only
-lepidosaur_males <- comparative.data(phy = tree_plus, data = max_bf_males, 
                                names.col = tips, vcv = TRUE,
                                warn.dropped = FALSE, na.omit = FALSE)
 ```
@@ -94,6 +83,8 @@ model1a <- pgls(log(max_bf) ~ log(max_svl)* as.factor(arboreal), data = lepidosa
                    lambda = "ML", bounds = list(lambda = c(0.1,1)))
 model1f <- pgls(log(max_bf) ~ log(max_svl) * as.factor(fossorial), data = lepidosaur,
                    lambda = "ML")
+model1ac <- pgls(log(max_bf) ~ log(max_svl) * as.factor(acrodont), data = lepidosaur,
+                   lambda = "ML")
 
 # HW
 model2d <- pgls(log(max_bf) ~ log(max_hw)* as.factor(Diet), data = lepidosaur,
@@ -102,13 +93,16 @@ model2a <- pgls(log(max_bf) ~ log(max_hw)* as.factor(arboreal), data = lepidosau
                    lambda = "ML")
 model2f <- pgls(log(max_bf) ~ log(max_hw) * as.factor(fossorial), data = lepidosaur,
                    lambda = "ML")
-
+model2ac <- pgls(log(max_bf) ~ log(max_hw) * as.factor(acrodont), data = lepidosaur,
+                   lambda = "ML")
 # HL
 model3d <- pgls(log(max_bf) ~ log(max_hl)* as.factor(Diet), data = lepidosaur,
                    lambda = "ML")
 model3a <- pgls(log(max_bf) ~ log(max_hl)* as.factor(arboreal), data = lepidosaur,
                    lambda = "ML")
 model3f <- pgls(log(max_bf) ~ log(max_hl) * as.factor(fossorial), data = lepidosaur,
+                   lambda = "ML")
+model3ac <- pgls(log(max_bf) ~ log(max_hl) * as.factor(acrodont), data = lepidosaur,
                    lambda = "ML")
 
 # HH
@@ -117,6 +111,8 @@ model4d <- pgls(log(max_bf) ~ log(max_hh)* as.factor(Diet), data = lepidosaur,
 model4a <- pgls(log(max_bf) ~ log(max_hh)* as.factor(arboreal), data = lepidosaur,
                    lambda = "ML")
 model4f <- pgls(log(max_bf) ~ log(max_hh) * as.factor(fossorial), data = lepidosaur,
+                   lambda = "ML")
+model4ac <- pgls(log(max_bf) ~ log(max_hh) * as.factor(acrodont), data = lepidosaur,
                    lambda = "ML")
 ```
 
@@ -578,4 +574,104 @@ hh <-
 
 # Save plot
 #ggsave(here("figures/bodysize-bite-force-fossorial-noslope.png"), height = 5)
+```
+
+
+Fit models to get regression lines
+```{r}
+# SVL
+model1a <- pgls(log(max_bf) ~ log(max_svl)* as.factor(acrodont), data = lepidosaur,
+                   lambda = "ML")
+
+# HW
+model2a <- pgls(log(max_bf) ~ log(max_hw)* as.factor(acrodont), data = lepidosaur,
+                   lambda = "ML", bounds = list(lambda = c(0.1,1)))
+
+# HL
+model3a <- pgls(log(max_bf) ~ log(max_hl)* as.factor(acrodont), data = lepidosaur,
+                   lambda = "ML")
+
+# HH
+model4a <- pgls(log(max_bf) ~ log(max_hh)* as.factor(acrodont), data = lepidosaur,
+                   lambda = "ML")
+```
+
+Plots 
+
+```{r}
+svl <-
+  ggplot(lepidosaur$data, aes(y = log(max_bf), x = log(max_svl), colour = acrodont)) + 
+  geom_point(alpha = 0.5) +
+  scale_colour_manual(values = a_colours) +
+  theme_bw(base_size = 14) +
+  xlab("ln(SVL) (mm)") +
+  ylab("ln(bite-force) (N)") + 
+  #ylim(-3, 6) +
+  theme(legend.position = "right", legend.title = element_blank()) +
+  labs(tag = "A") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12),
+        legend.position = "none") +
+  geom_abline(intercept = coefficients(model1a)[1], 
+              slope = coefficients(model1a)[2], colour = a_colours[1]) +
+  geom_abline(intercept = coefficients(model1a)[1] + coefficients(model1a)[3], 
+              slope = coefficients(model1a)[2] + coefficients(model1a)[4], colour = a_colours[2])
+
+hw <-
+  ggplot(lepidosaur$data, aes(y = log(max_bf), x = log(max_hw), colour = acrodont)) + 
+  geom_point(alpha = 0.5) +
+  scale_colour_manual(values = a_colours) +
+  theme_bw(base_size = 14) +
+  xlab("ln(head width) (mm)") +
+  ylab("ln(bite-force) (N)") + 
+  #ylim(-3, 6) +
+  theme(legend.position = "right", legend.title = element_blank()) +
+  labs(tag = "B") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12),
+        legend.position = "none") +
+  geom_abline(intercept = coefficients(model2a)[1], 
+              slope = coefficients(model2a)[2], colour = a_colours[1]) +
+  geom_abline(intercept = coefficients(model2a)[1] + coefficients(model2a)[3], 
+              slope = coefficients(model2a)[2] + coefficients(model2a)[4], colour = a_colours[2])
+  
+hl <-
+  ggplot(lepidosaur$data, aes(y = log(max_bf), x = log(max_hl), colour = acrodont)) + 
+  geom_point(alpha = 0.5) +
+  scale_colour_manual(values = a_colours) +
+  theme_bw(base_size = 14) +
+  xlab("ln(head length) (mm)") +
+  ylab("ln(bite-force) (N)") + 
+  #ylim(-3, 6) +
+  theme(legend.position = "right", legend.title = element_blank()) +
+  labs(tag = "C") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12),
+        legend.position = "none") +
+  geom_abline(intercept = coefficients(model3a)[1], 
+              slope = coefficients(model3a)[2], colour = a_colours[1]) +
+  geom_abline(intercept = coefficients(model3a)[1] + coefficients(model3a)[3], 
+              slope = coefficients(model3a)[2] + coefficients(model3a)[4], colour = a_colours[2])
+  
+hh <-
+  ggplot(lepidosaur$data, aes(y = log(max_bf), x = log(max_hh), colour = acrodont)) + 
+  geom_point(alpha = 0.5) +
+  scale_colour_manual(values = a_colours) +
+  theme_bw(base_size = 14) +
+  xlab("ln(head height) (mm)") +
+  ylab("ln(bite-force) (N)") + 
+  #ylim(-3, 6) +
+  theme(legend.position = "right", legend.title = element_blank()) +
+  labs(tag = "D") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12))  +
+  geom_abline(intercept = coefficients(model4a)[1], 
+              slope = coefficients(model4a)[2], colour = a_colours[1]) +
+  geom_abline(intercept = coefficients(model4a)[1] + coefficients(model4a)[3], 
+              slope = coefficients(model4a)[2] + coefficients(model4a)[4], colour = a_colours[2])
+
+(svl + hw) / (hl + hh)
+
+# Save plot
+#ggsave(here("figures/bodysize-bite-force-acrodont.png"), height = 5)
 ```
