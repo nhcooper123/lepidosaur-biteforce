@@ -74,45 +74,19 @@ lepidosaur <- comparative.data(phy = tree_plus, data = max_bf,
                                warn.dropped = FALSE, na.omit = FALSE)
 ```
 
-Fit models to get regression lines
+Fit models to get regression lines for significant models
 ```{r}
-# SVL
-model1d <- pgls(log(max_bf) ~ log(max_svl)* as.factor(Diet), data = lepidosaur,
-                   lambda = "ML")
-model1a <- pgls(log(max_bf) ~ log(max_svl)* as.factor(arboreal), data = lepidosaur,
-                   lambda = "ML", bounds = list(lambda = c(0.1,1)))
-model1f <- pgls(log(max_bf) ~ log(max_svl) * as.factor(fossorial), data = lepidosaur,
-                   lambda = "ML")
-model1ac <- pgls(log(max_bf) ~ log(max_svl) * as.factor(acrodont), data = lepidosaur,
-                   lambda = "ML")
-
 # HW
-model2d <- pgls(log(max_bf) ~ log(max_hw)* as.factor(Diet), data = lepidosaur,
+model2d <- pgls(log(max_bf) ~ log(max_hw) + as.factor(Diet), data = lepidosaur,
                    lambda = "ML")
-model2a <- pgls(log(max_bf) ~ log(max_hw)* as.factor(arboreal), data = lepidosaur,
-                   lambda = "ML")
-model2f <- pgls(log(max_bf) ~ log(max_hw) * as.factor(fossorial), data = lepidosaur,
-                   lambda = "ML")
-model2ac <- pgls(log(max_bf) ~ log(max_hw) * as.factor(acrodont), data = lepidosaur,
+model2f <- pgls(log(max_bf) ~ log(max_hw) + as.factor(fossorial), data = lepidosaur,
                    lambda = "ML")
 # HL
-model3d <- pgls(log(max_bf) ~ log(max_hl)* as.factor(Diet), data = lepidosaur,
-                   lambda = "ML")
-model3a <- pgls(log(max_bf) ~ log(max_hl)* as.factor(arboreal), data = lepidosaur,
-                   lambda = "ML")
-model3f <- pgls(log(max_bf) ~ log(max_hl) * as.factor(fossorial), data = lepidosaur,
-                   lambda = "ML")
-model3ac <- pgls(log(max_bf) ~ log(max_hl) * as.factor(acrodont), data = lepidosaur,
+model3f <- pgls(log(max_bf) ~ log(max_hl) + as.factor(fossorial), data = lepidosaur,
                    lambda = "ML")
 
 # HH
-model4d <- pgls(log(max_bf) ~ log(max_hh)* as.factor(Diet), data = lepidosaur,
-                   lambda = "ML")
-model4a <- pgls(log(max_bf) ~ log(max_hh)* as.factor(arboreal), data = lepidosaur,
-                   lambda = "ML")
-model4f <- pgls(log(max_bf) ~ log(max_hh) * as.factor(fossorial), data = lepidosaur,
-                   lambda = "ML")
-model4ac <- pgls(log(max_bf) ~ log(max_hh) * as.factor(acrodont), data = lepidosaur,
+model4f <- pgls(log(max_bf) ~ log(max_hh) + as.factor(fossorial), data = lepidosaur,
                    lambda = "ML")
 ```
 
@@ -125,7 +99,7 @@ lepidosaur_d <- filter(lepidosaur$data, !is.na(Diet))
 svl <-
   ggplot(lepidosaur_d, aes(y = log(max_bf), x = log(max_svl), colour = Diet)) + 
   geom_point(alpha = 0.5) +
-  scale_colour_manual(values = d_colours) +
+  scale_colour_manual(values = diet_colours) +
   theme_bw(base_size = 14) +
   xlab("ln(SVL) (mm)") +
   ylab("ln(bite-force) (N)") + 
@@ -134,18 +108,12 @@ svl <-
   labs(tag = "A") +
   theme(plot.tag = element_text(size = 12, face = "bold"),
         axis.title = element_text(size = 12),
-        legend.position = "none") +
-  geom_abline(intercept = coefficients(model1d)[1], 
-              slope = coefficients(model1d)[2], colour = d_colours[1]) +
-  geom_abline(intercept = coefficients(model1d)[1] + coefficients(model1d)[3], 
-              slope = coefficients(model1d)[2] + coefficients(model1d)[5], colour = d_colours[2]) +
-  geom_abline(intercept = coefficients(model1d)[1] + coefficients(model1d)[4], 
-              slope = coefficients(model1d)[2] + coefficients(model1d)[6], colour = d_colours[3])
+        legend.position = "none") 
 
 hw <-
   ggplot(lepidosaur_d, aes(y = log(max_bf), x = log(max_hw), colour = Diet)) + 
   geom_point(alpha = 0.5) +
-  scale_colour_manual(values = d_colours) +
+  scale_colour_manual(values = diet_colours) +
   theme_bw(base_size = 14) +
   xlab("ln(head width) (mm)") +
   ylab("ln(bite-force) (N)") + 
@@ -156,16 +124,16 @@ hw <-
         axis.title = element_text(size = 12),
         legend.position = "none") +
   geom_abline(intercept = coefficients(model2d)[1], 
-              slope = coefficients(model2d)[2], colour = d_colours[1]) +
+              slope = coefficients(model2d)[2], colour = diet_colours[1]) +
   geom_abline(intercept = coefficients(model2d)[1] + coefficients(model2d)[3], 
-              slope = coefficients(model2d)[2] + coefficients(model2d)[5], colour = d_colours[2]) +
+              slope = coefficients(model2d)[2], colour = diet_colours[2]) +
   geom_abline(intercept = coefficients(model2d)[1] + coefficients(model2d)[4], 
-              slope = coefficients(model2d)[2] + coefficients(model2d)[6], colour = d_colours[3])
+              slope = coefficients(model2d)[2], colour = diet_colours[3])
   
 hl <-
   ggplot(lepidosaur_d, aes(y = log(max_bf), x = log(max_hl), colour = Diet)) + 
   geom_point(alpha = 0.5) +
-  scale_colour_manual(values = d_colours) +
+  scale_colour_manual(values = diet_colours) +
   theme_bw(base_size = 14) +
   xlab("ln(head length) (mm)") +
   ylab("ln(bite-force) (N)") + 
@@ -174,18 +142,11 @@ hl <-
   labs(tag = "C") +
   theme(plot.tag = element_text(size = 12, face = "bold"),
         axis.title = element_text(size = 12),
-        legend.position = "none") +
-  geom_abline(intercept = coefficients(model3d)[1], 
-              slope = coefficients(model3d)[2], colour = d_colours[1]) +
-  geom_abline(intercept = coefficients(model3d)[1] + coefficients(model3d)[3], 
-              slope = coefficients(model3d)[2] + coefficients(model3d)[5], colour = d_colours[2]) +
-  geom_abline(intercept = coefficients(model3d)[1] + coefficients(model3d)[4], 
-              slope = coefficients(model3d)[2] + coefficients(model3d)[6], colour = d_colours[3])
-  
+        legend.position = "none") 
 hh <-
   ggplot(lepidosaur_d, aes(y = log(max_bf), x = log(max_hh), colour = Diet)) + 
   geom_point(alpha = 0.5) +
-  scale_colour_manual(values = d_colours) +
+  scale_colour_manual(values = diet_colours) +
   theme_bw(base_size = 14) +
   xlab("ln(head height) (mm)") +
   ylab("ln(bite-force) (N)") + 
@@ -193,13 +154,7 @@ hh <-
   theme(legend.position = "right", legend.title = element_blank()) +
   labs(tag = "D") +
   theme(plot.tag = element_text(size = 12, face = "bold"),
-        axis.title = element_text(size = 12))  +
-  geom_abline(intercept = coefficients(model4d)[1], 
-              slope = coefficients(model4d)[2], colour = d_colours[1]) +
-  geom_abline(intercept = coefficients(model4d)[1] + coefficients(model4d)[3], 
-              slope = coefficients(model4d)[2] + coefficients(model4d)[5], colour = d_colours[2]) +
-  geom_abline(intercept = coefficients(model4d)[1] + coefficients(model4d)[4], 
-              slope = coefficients(model4d)[2] + coefficients(model4d)[6], colour = d_colours[3])
+        axis.title = element_text(size = 12)) 
 
 (svl + hw) / (hl + hh)
 
@@ -216,7 +171,7 @@ lepidosaur_a <- filter(lepidosaur$data, !is.na(arboreal))
 svl <-
   ggplot(lepidosaur_a, aes(y = log(max_bf), x = log(max_svl), colour = arboreal)) + 
   geom_point(alpha = 0.5) +
-  scale_colour_manual(values = a_colours) +
+  scale_colour_manual(values = arb_colours) +
   theme_bw(base_size = 14) +
   xlab("ln(SVL) (mm)") +
   ylab("ln(bite-force) (N)") + 
@@ -225,16 +180,12 @@ svl <-
   labs(tag = "A") +
   theme(plot.tag = element_text(size = 12, face = "bold"),
         axis.title = element_text(size = 12),
-        legend.position = "none") +
-  geom_abline(intercept = coefficients(model1a)[1], 
-              slope = coefficients(model1a)[2], colour = a_colours[1]) +
-  geom_abline(intercept = coefficients(model1a)[1] + coefficients(model1a)[3], 
-              slope = coefficients(model1a)[2] + coefficients(model1a)[4], colour = a_colours[2])
+        legend.position = "none")
 
 hw <-
   ggplot(lepidosaur_a, aes(y = log(max_bf), x = log(max_hw), colour = arboreal)) + 
   geom_point(alpha = 0.5) +
-  scale_colour_manual(values = a_colours) +
+  scale_colour_manual(values = arb_colours) +
   theme_bw(base_size = 14) +
   xlab("ln(head width) (mm)") +
   ylab("ln(bite-force) (N)") + 
@@ -243,16 +194,12 @@ hw <-
   labs(tag = "B") +
   theme(plot.tag = element_text(size = 12, face = "bold"),
         axis.title = element_text(size = 12),
-        legend.position = "none") +
-  geom_abline(intercept = coefficients(model2a)[1], 
-              slope = coefficients(model2a)[2], colour = a_colours[1]) +
-  geom_abline(intercept = coefficients(model2a)[1] + coefficients(model2a)[3], 
-              slope = coefficients(model2a)[2] + coefficients(model2a)[4], colour = a_colours[2])
+        legend.position = "none")
   
 hl <-
   ggplot(lepidosaur_a, aes(y = log(max_bf), x = log(max_hl), colour = arboreal)) + 
   geom_point(alpha = 0.5) +
-  scale_colour_manual(values = a_colours) +
+  scale_colour_manual(values = arb_colours) +
   theme_bw(base_size = 14) +
   xlab("ln(head length) (mm)") +
   ylab("ln(bite-force) (N)") + 
@@ -261,16 +208,12 @@ hl <-
   labs(tag = "C") +
   theme(plot.tag = element_text(size = 12, face = "bold"),
         axis.title = element_text(size = 12),
-        legend.position = "none") +
-  geom_abline(intercept = coefficients(model3a)[1], 
-              slope = coefficients(model3a)[2], colour = a_colours[1]) +
-  geom_abline(intercept = coefficients(model3a)[1] + coefficients(model3a)[3], 
-              slope = coefficients(model3a)[2] + coefficients(model3a)[4], colour = a_colours[2])
+        legend.position = "none")
   
 hh <-
   ggplot(lepidosaur_a, aes(y = log(max_bf), x = log(max_hh), colour = arboreal)) + 
   geom_point(alpha = 0.5) +
-  scale_colour_manual(values = a_colours) +
+  scale_colour_manual(values = arb_colours) +
   theme_bw(base_size = 14) +
   xlab("ln(head height) (mm)") +
   ylab("ln(bite-force) (N)") + 
@@ -278,11 +221,7 @@ hh <-
   theme(legend.position = "right", legend.title = element_blank()) +
   labs(tag = "D") +
   theme(plot.tag = element_text(size = 12, face = "bold"),
-        axis.title = element_text(size = 12))  +
-  geom_abline(intercept = coefficients(model4a)[1], 
-              slope = coefficients(model4a)[2], colour = a_colours[1]) +
-  geom_abline(intercept = coefficients(model4a)[1] + coefficients(model4a)[3], 
-              slope = coefficients(model4a)[2] + coefficients(model4a)[4], colour = a_colours[2])
+        axis.title = element_text(size = 12)) 
 
 (svl + hw) / (hl + hh)
 
@@ -299,7 +238,7 @@ lepidosaur_f <- filter(lepidosaur$data, !is.na(fossorial))
 svl <-
   ggplot(lepidosaur_f, aes(y = log(max_bf), x = log(max_svl), colour = fossorial)) + 
   geom_point(alpha = 0.5) +
-  scale_colour_manual(values = f_colours) +
+  scale_colour_manual(values = foss_colours) +
   theme_bw(base_size = 14) +
   xlab("ln(SVL) (mm)") +
   ylab("ln(bite-force) (N)") + 
@@ -308,11 +247,7 @@ svl <-
   labs(tag = "A") +
   theme(plot.tag = element_text(size = 12, face = "bold"),
         axis.title = element_text(size = 12),
-        legend.position = "none") +
-  geom_abline(intercept = coefficients(model1f)[1], 
-              slope = coefficients(model1f)[2], colour = f_colours[1]) +
-  geom_abline(intercept = coefficients(model1f)[1] + coefficients(model1f)[3], 
-              slope = coefficients(model1f)[2] + coefficients(model1f)[4], colour = f_colours[2])
+        legend.position = "none")
 
 hw <-
   ggplot(lepidosaur_f, aes(y = log(max_bf), x = log(max_hw), colour = fossorial)) + 
@@ -330,7 +265,7 @@ hw <-
   geom_abline(intercept = coefficients(model2f)[1], 
               slope = coefficients(model2f)[2], colour = f_colours[1]) +
   geom_abline(intercept = coefficients(model2f)[1] + coefficients(model2f)[3], 
-              slope = coefficients(model2f)[2] + coefficients(model2f)[4], colour = f_colours[2])
+              slope = coefficients(model2f)[2], colour = f_colours[2])
   
 hl <-
   ggplot(lepidosaur_f, aes(y = log(max_bf), x = log(max_hl), colour = fossorial)) + 
@@ -348,7 +283,7 @@ hl <-
   geom_abline(intercept = coefficients(model3f)[1], 
               slope = coefficients(model3f)[2], colour = f_colours[1]) +
   geom_abline(intercept = coefficients(model3f)[1] + coefficients(model3f)[3], 
-              slope = coefficients(model3f)[2] + coefficients(model3f)[4], colour = f_colours[2])
+              slope = coefficients(model3f)[2], colour = f_colours[2])
   
 hh <-
   ggplot(lepidosaur_f, aes(y = log(max_bf), x = log(max_hh), colour = fossorial)) + 
@@ -365,7 +300,7 @@ hh <-
   geom_abline(intercept = coefficients(model4f)[1], 
               slope = coefficients(model4f)[2], colour = f_colours[1]) +
   geom_abline(intercept = coefficients(model4f)[1] + coefficients(model4f)[3], 
-              slope = coefficients(model4f)[2] + coefficients(model4f)[4], colour = f_colours[2])
+              slope = coefficients(model4f)[2], colour = f_colours[2])
 
 (svl + hw) / (hl + hh)
 
@@ -373,230 +308,7 @@ hh <-
 #ggsave(here("figures/bodysize-bite-force-fossorial.png"), height = 5)
 ```
 
-## Remove slopes...
-
-Plots coloured by DIET
-
-```{r}
-# Remove NAs
-lepidosaur_d <- filter(lepidosaur$data, !is.na(Diet))
-
-svl <-
-  ggplot(lepidosaur_d, aes(y = log(max_bf), x = log(max_svl), colour = Diet)) + 
-  geom_point(alpha = 0.5) +
-  scale_colour_manual(values = d_colours) +
-  theme_bw(base_size = 14) +
-  xlab("ln(SVL) (mm)") +
-  ylab("ln(bite-force) (N)") + 
-  #ylim(-3, 6) +
-  theme(legend.position = "right", legend.title = element_blank()) +
-  labs(tag = "A") +
-  theme(plot.tag = element_text(size = 12, face = "bold"),
-        axis.title = element_text(size = 12),
-        legend.position = "none") 
-
-hw <-
-  ggplot(lepidosaur_d, aes(y = log(max_bf), x = log(max_hw), colour = Diet)) + 
-  geom_point(alpha = 0.5) +
-  scale_colour_manual(values = d_colours) +
-  theme_bw(base_size = 14) +
-  xlab("ln(head width) (mm)") +
-  ylab("ln(bite-force) (N)") + 
-  #ylim(-3, 6) +
-  theme(legend.position = "right", legend.title = element_blank()) +
-  labs(tag = "B") +
-  theme(plot.tag = element_text(size = 12, face = "bold"),
-        axis.title = element_text(size = 12),
-        legend.position = "none") 
-  
-hl <-
-  ggplot(lepidosaur_d, aes(y = log(max_bf), x = log(max_hl), colour = Diet)) + 
-  geom_point(alpha = 0.5) +
-  scale_colour_manual(values = d_colours) +
-  theme_bw(base_size = 14) +
-  xlab("ln(head length) (mm)") +
-  ylab("ln(bite-force) (N)") + 
-  #ylim(-3, 6) +
-  theme(legend.position = "right", legend.title = element_blank()) +
-  labs(tag = "C") +
-  theme(plot.tag = element_text(size = 12, face = "bold"),
-        axis.title = element_text(size = 12),
-        legend.position = "none") 
-  
-hh <-
-  ggplot(lepidosaur_d, aes(y = log(max_bf), x = log(max_hh), colour = Diet)) + 
-  geom_point(alpha = 0.5) +
-  scale_colour_manual(values = d_colours) +
-  theme_bw(base_size = 14) +
-  xlab("ln(head height) (mm)") +
-  ylab("ln(bite-force) (N)") + 
-  #ylim(-3, 6) +
-  theme(legend.position = "right", legend.title = element_blank()) +
-  labs(tag = "D") +
-  theme(plot.tag = element_text(size = 12, face = "bold"),
-        axis.title = element_text(size = 12)) 
-
-(svl + hw) / (hl + hh)
-
-# Save plot
-#ggsave(here("figures/bodysize-bite-force-diet-noslope.png"), height = 5)
-```
-
-Plots coloured by ARBOREAL
-
-```{r}
-# Remove NAs
-lepidosaur_a <- filter(lepidosaur$data, !is.na(arboreal))
-
-svl <-
-  ggplot(lepidosaur_a, aes(y = log(max_bf), x = log(max_svl), colour = arboreal)) + 
-  geom_point(alpha = 0.5) +
-  scale_colour_manual(values = a_colours) +
-  theme_bw(base_size = 14) +
-  xlab("ln(SVL) (mm)") +
-  ylab("ln(bite-force) (N)") + 
-  #ylim(-3, 6) +
-  theme(legend.position = "right", legend.title = element_blank()) +
-  labs(tag = "A") +
-  theme(plot.tag = element_text(size = 12, face = "bold"),
-        axis.title = element_text(size = 12),
-        legend.position = "none")
-
-hw <-
-  ggplot(lepidosaur_a, aes(y = log(max_bf), x = log(max_hw), colour = arboreal)) + 
-  geom_point(alpha = 0.5) +
-  scale_colour_manual(values = a_colours) +
-  theme_bw(base_size = 14) +
-  xlab("ln(head width) (mm)") +
-  ylab("ln(bite-force) (N)") + 
-  #ylim(-3, 6) +
-  theme(legend.position = "right", legend.title = element_blank()) +
-  labs(tag = "B") +
-  theme(plot.tag = element_text(size = 12, face = "bold"),
-        axis.title = element_text(size = 12),
-        legend.position = "none") 
-  
-hl <-
-  ggplot(lepidosaur_a, aes(y = log(max_bf), x = log(max_hl), colour = arboreal)) + 
-  geom_point(alpha = 0.5) +
-  scale_colour_manual(values = a_colours) +
-  theme_bw(base_size = 14) +
-  xlab("ln(head length) (mm)") +
-  ylab("ln(bite-force) (N)") + 
-  #ylim(-3, 6) +
-  theme(legend.position = "right", legend.title = element_blank()) +
-  labs(tag = "C") +
-  theme(plot.tag = element_text(size = 12, face = "bold"),
-        axis.title = element_text(size = 12),
-        legend.position = "none") 
-  
-hh <-
-  ggplot(lepidosaur_a, aes(y = log(max_bf), x = log(max_hh), colour = arboreal)) + 
-  geom_point(alpha = 0.5) +
-  scale_colour_manual(values = a_colours) +
-  theme_bw(base_size = 14) +
-  xlab("ln(head height) (mm)") +
-  ylab("ln(bite-force) (N)") + 
-  #ylim(-3, 6) +
-  theme(legend.position = "right", legend.title = element_blank()) +
-  labs(tag = "D") +
-  theme(plot.tag = element_text(size = 12, face = "bold"),
-        axis.title = element_text(size = 12))  
-
-(svl + hw) / (hl + hh)
-
-# Save plot
-#ggsave(here("figures/bodysize-bite-force-arboreal-noslope.png"), height = 5)
-```
-
-Plots coloured by FOSSORIAL
-
-```{r}
-# Remove NAs
-lepidosaur_f <- filter(lepidosaur$data, !is.na(fossorial))
-
-svl <-
-  ggplot(lepidosaur_f, aes(y = log(max_bf), x = log(max_svl), colour = fossorial)) + 
-  geom_point(alpha = 0.5) +
-  scale_colour_manual(values = f_colours) +
-  theme_bw(base_size = 14) +
-  xlab("ln(SVL) (mm)") +
-  ylab("ln(bite-force) (N)") + 
-  #ylim(-3, 6) +
-  theme(legend.position = "right", legend.title = element_blank()) +
-  labs(tag = "A") +
-  theme(plot.tag = element_text(size = 12, face = "bold"),
-        axis.title = element_text(size = 12),
-        legend.position = "none") 
-
-hw <-
-  ggplot(lepidosaur_f, aes(y = log(max_bf), x = log(max_hw), colour = fossorial)) + 
-  geom_point(alpha = 0.5) +
-  scale_colour_manual(values = f_colours) +
-  theme_bw(base_size = 14) +
-  xlab("ln(head width) (mm)") +
-  ylab("ln(bite-force) (N)") + 
-  #ylim(-3, 6) +
-  theme(legend.position = "right", legend.title = element_blank()) +
-  labs(tag = "B") +
-  theme(plot.tag = element_text(size = 12, face = "bold"),
-        axis.title = element_text(size = 12),
-        legend.position = "none") 
-  
-hl <-
-  ggplot(lepidosaur_f, aes(y = log(max_bf), x = log(max_hl), colour = fossorial)) + 
-  geom_point(alpha = 0.5) +
-  scale_colour_manual(values = f_colours) +
-  theme_bw(base_size = 14) +
-  xlab("ln(head length) (mm)") +
-  ylab("ln(bite-force) (N)") + 
-  #ylim(-3, 6) +
-  theme(legend.position = "right", legend.title = element_blank()) +
-  labs(tag = "C") +
-  theme(plot.tag = element_text(size = 12, face = "bold"),
-        axis.title = element_text(size = 12),
-        legend.position = "none") 
-  
-hh <-
-  ggplot(lepidosaur_f, aes(y = log(max_bf), x = log(max_hh), colour = fossorial)) + 
-  geom_point(alpha = 0.5) +
-  scale_colour_manual(values = f_colours) +
-  theme_bw(base_size = 14) +
-  xlab("ln(head height) (mm)") +
-  ylab("ln(bite-force) (N)") + 
-  #ylim(-3, 6) +
-  theme(legend.position = "right", legend.title = element_blank()) +
-  labs(tag = "D") +
-  theme(plot.tag = element_text(size = 12, face = "bold"),
-        axis.title = element_text(size = 12)) 
-
-(svl + hw) / (hl + hh)
-
-# Save plot
-#ggsave(here("figures/bodysize-bite-force-fossorial-noslope.png"), height = 5)
-```
-
-
-Fit models to get regression lines
-```{r}
-# SVL
-model1a <- pgls(log(max_bf) ~ log(max_svl)* as.factor(acrodont), data = lepidosaur,
-                   lambda = "ML")
-
-# HW
-model2a <- pgls(log(max_bf) ~ log(max_hw)* as.factor(acrodont), data = lepidosaur,
-                   lambda = "ML", bounds = list(lambda = c(0.1,1)))
-
-# HL
-model3a <- pgls(log(max_bf) ~ log(max_hl)* as.factor(acrodont), data = lepidosaur,
-                   lambda = "ML")
-
-# HH
-model4a <- pgls(log(max_bf) ~ log(max_hh)* as.factor(acrodont), data = lepidosaur,
-                   lambda = "ML")
-```
-
-Plots 
+Plots coloured by acrodonty
 
 ```{r}
 svl <-
@@ -611,11 +323,7 @@ svl <-
   labs(tag = "A") +
   theme(plot.tag = element_text(size = 12, face = "bold"),
         axis.title = element_text(size = 12),
-        legend.position = "none") +
-  geom_abline(intercept = coefficients(model1a)[1], 
-              slope = coefficients(model1a)[2], colour = a_colours[1]) +
-  geom_abline(intercept = coefficients(model1a)[1] + coefficients(model1a)[3], 
-              slope = coefficients(model1a)[2] + coefficients(model1a)[4], colour = a_colours[2])
+        legend.position = "none") 
 
 hw <-
   ggplot(lepidosaur$data, aes(y = log(max_bf), x = log(max_hw), colour = acrodont)) + 
@@ -629,11 +337,7 @@ hw <-
   labs(tag = "B") +
   theme(plot.tag = element_text(size = 12, face = "bold"),
         axis.title = element_text(size = 12),
-        legend.position = "none") +
-  geom_abline(intercept = coefficients(model2a)[1], 
-              slope = coefficients(model2a)[2], colour = a_colours[1]) +
-  geom_abline(intercept = coefficients(model2a)[1] + coefficients(model2a)[3], 
-              slope = coefficients(model2a)[2] + coefficients(model2a)[4], colour = a_colours[2])
+        legend.position = "none")
   
 hl <-
   ggplot(lepidosaur$data, aes(y = log(max_bf), x = log(max_hl), colour = acrodont)) + 
@@ -647,11 +351,7 @@ hl <-
   labs(tag = "C") +
   theme(plot.tag = element_text(size = 12, face = "bold"),
         axis.title = element_text(size = 12),
-        legend.position = "none") +
-  geom_abline(intercept = coefficients(model3a)[1], 
-              slope = coefficients(model3a)[2], colour = a_colours[1]) +
-  geom_abline(intercept = coefficients(model3a)[1] + coefficients(model3a)[3], 
-              slope = coefficients(model3a)[2] + coefficients(model3a)[4], colour = a_colours[2])
+        legend.position = "none")
   
 hh <-
   ggplot(lepidosaur$data, aes(y = log(max_bf), x = log(max_hh), colour = acrodont)) + 
@@ -664,11 +364,7 @@ hh <-
   theme(legend.position = "right", legend.title = element_blank()) +
   labs(tag = "D") +
   theme(plot.tag = element_text(size = 12, face = "bold"),
-        axis.title = element_text(size = 12))  +
-  geom_abline(intercept = coefficients(model4a)[1], 
-              slope = coefficients(model4a)[2], colour = a_colours[1]) +
-  geom_abline(intercept = coefficients(model4a)[1] + coefficients(model4a)[3], 
-              slope = coefficients(model4a)[2] + coefficients(model4a)[4], colour = a_colours[2])
+        axis.title = element_text(size = 12))
 
 (svl + hw) / (hl + hh)
 
