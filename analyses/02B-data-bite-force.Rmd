@@ -204,10 +204,10 @@ ds1_diet <- filter(ds1, !is.na(Diet))
 dietplot <-
   ggplot(ds1_diet, aes(y = log(max_bf), x = Diet)) + 
   geom_jitter(alpha = 0.5, width = 0.2) +
-  geom_point(data = diet_bf1, aes(y = MeanBF), size = 3, col = "red") +
+  geom_point(data = diet_bf1, aes(y = MeanBF), size = 3, col = "#880F0A") +
   geom_errorbar(data = diet_bf1, 
                 aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
-                show.legend = FALSE, width = 0.2, col = "red") +
+                show.legend = FALSE, width = 0.2, col = "#880F0A") +
   scale_colour_manual(values = sf_colours) +
   coord_flip() +
   theme_bw(base_size = 14) +
@@ -242,10 +242,10 @@ ds1_arb <- filter(ds1, !is.na(arboreal))
 arbplot <-
   ggplot(ds1_arb, aes(y = log(max_bf), x = arboreal)) + 
   geom_jitter(alpha = 0.5, width = 0.2) +
-  geom_point(data = arb_bf1, aes(y = MeanBF), size = 3, col = "red") +
+  geom_point(data = arb_bf1, aes(y = MeanBF), size = 3, col = "#880F0A") +
   geom_errorbar(data = arb_bf1, 
                 aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
-                show.legend = FALSE, width = 0.2, col = "red") +
+                show.legend = FALSE, width = 0.2, col = "#880F0A") +
   scale_colour_manual(values = sf_colours) +
   coord_flip() +
   theme_bw(base_size = 14) +
@@ -280,10 +280,10 @@ ds1_fos <- filter(ds1, !is.na(fossorial))
 fosplot <-
   ggplot(ds1_fos, aes(y = log(max_bf), x = fossorial)) + 
   geom_jitter(alpha = 0.5, width = 0.2) +
-  geom_point(data = fos_bf1, aes(y = MeanBF), size = 3, col = "red") +
+  geom_point(data = fos_bf1, aes(y = MeanBF), size = 3, col = "#880F0A") +
   geom_errorbar(data = fos_bf1, 
                 aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
-                show.legend = FALSE, width = 0.2, col = "red") +
+                show.legend = FALSE, width = 0.2, col = "#880F0A") +
   scale_colour_manual(values = sf_colours) +
   coord_flip() +
   theme_bw(base_size = 14) +
@@ -324,10 +324,10 @@ ds1_sax <-
 saxplot <-
   ggplot(ds1_sax, aes(y = log(max_bf), x = saxicolous)) + 
   geom_jitter(alpha = 0.5, width = 0.2) +
-  geom_point(data = sax_bf1, aes(y = MeanBF), size = 3, col = "red") +
+  geom_point(data = sax_bf1, aes(y = MeanBF), size = 3, col = "#880F0A") +
   geom_errorbar(data = sax_bf1, 
                 aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
-                show.legend = FALSE, width = 0.2, col = "red") +
+                show.legend = FALSE, width = 0.2, col = "#880F0A") +
   scale_colour_manual(values = sf_colours) +
   coord_flip() +
   theme_bw(base_size = 14) +
@@ -362,10 +362,10 @@ ds1_acrodont <- filter(ds1, !is.na(acrodont))
 acrodontplot <-
   ggplot(ds1_acrodont, aes(y = log(max_bf), x = acrodont)) + 
   geom_jitter(alpha = 0.5, width = 0.2) +
-  geom_point(data = acrodont_bf1, aes(y = MeanBF), size = 3, col = "red") +
+  geom_point(data = acrodont_bf1, aes(y = MeanBF), size = 3, col = "#880F0A") +
   geom_errorbar(data = acrodont_bf1, 
                 aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
-                show.legend = FALSE, width = 0.2, col = "red") +
+                show.legend = FALSE, width = 0.2, col = "#880F0A") +
   scale_colour_manual(values = sf_colours) +
   coord_flip() +
   theme_bw(base_size = 14) +
