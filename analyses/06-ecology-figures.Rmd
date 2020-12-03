@@ -52,6 +52,9 @@ arb_colours <- c("#00783e", "grey")
 # Fossorial
 foss_colours <- c("#663300", "grey")
 
+# Saxicolous
+sax_colours <- c("#36013f", "grey")
+
 # Acrodont
 a_colours <- c("#ffc100", "grey")
 ```
@@ -306,6 +309,73 @@ hh <-
 
 # Save plot
 #ggsave(here("figures/bodysize-bite-force-fossorial.png"), height = 5)
+```
+
+Plots coloured by saxicolous
+
+```{r}
+# Reorder
+lepidosaur$data$saxicolous <- relevel(as.factor(lepidosaur$data$saxicolous), ref = "Saxicolous")
+
+svl <-
+  ggplot(lepidosaur$data, aes(y = log(max_bf), x = log(max_svl), colour = saxicolous)) + 
+  geom_point(alpha = 0.5) +
+  scale_colour_manual(values = sax_colours) +
+  theme_bw(base_size = 14) +
+  xlab("ln(SVL) (mm)") +
+  ylab("ln(bite-force) (N)") + 
+  #ylim(-3, 6) +
+  theme(legend.position = "right", legend.title = element_blank()) +
+  labs(tag = "A") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12),
+        legend.position = "none") 
+
+hw <-
+  ggplot(lepidosaur$data, aes(y = log(max_bf), x = log(max_hw), colour = saxicolous)) + 
+  geom_point(alpha = 0.5) +
+  scale_colour_manual(values = sax_colours) +
+  theme_bw(base_size = 14) +
+  xlab("ln(head width) (mm)") +
+  ylab("ln(bite-force) (N)") + 
+  #ylim(-3, 6) +
+  theme(legend.position = "right", legend.title = element_blank()) +
+  labs(tag = "B") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12),
+        legend.position = "none")
+  
+hl <-
+  ggplot(lepidosaur$data, aes(y = log(max_bf), x = log(max_hl), colour = saxicolous)) + 
+  geom_point(alpha = 0.5) +
+  scale_colour_manual(values = sax_colours) +
+  theme_bw(base_size = 14) +
+  xlab("ln(head length) (mm)") +
+  ylab("ln(bite-force) (N)") + 
+  #ylim(-3, 6) +
+  theme(legend.position = "right", legend.title = element_blank()) +
+  labs(tag = "C") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12),
+        legend.position = "none")
+  
+hh <-
+  ggplot(lepidosaur$data, aes(y = log(max_bf), x = log(max_hh), colour = saxicolous)) + 
+  geom_point(alpha = 0.5) +
+  scale_colour_manual(values = sax_colours) +
+  theme_bw(base_size = 14) +
+  xlab("ln(head height) (mm)") +
+  ylab("ln(bite-force) (N)") + 
+  #ylim(-3, 6) +
+  theme(legend.position = "right", legend.title = element_blank()) +
+  labs(tag = "D") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12))
+
+(svl + hw) / (hl + hh)
+
+# Save plot
+#ggsave(here("figures/bodysize-bite-force-saxicolous.png"), height = 5)
 ```
 
 Plots coloured by acrodonty
