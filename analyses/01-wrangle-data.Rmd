@@ -112,7 +112,7 @@ bfdata1 <-
   mutate(acrodont = case_when(HigherTaxonomy == "Acrodonta" |
                               HigherTaxonomy == "Rhynchocephalia" ~ "Acrodont",
                               HigherTaxonomy != "Acrodonta" &
-                              HigherTaxonomy != "Rhynchocephalia" ~ "Pleurodont")) %>%
+                              HigherTaxonomy != "Rhynchocephalia" ~ "Non acrodont")) %>%
   # Add a column that says how many NAs each row has
   mutate(number_NAs = rowSums(is.na(.)))
 
