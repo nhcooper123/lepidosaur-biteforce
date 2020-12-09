@@ -253,7 +253,7 @@ arbplot <-
   ylab("ln(bite-force) (N)") + 
   ylim(-3, 7) +
   theme(legend.position = "right", legend.title = element_blank()) +
-  labs(tag = "C") +
+  labs(tag = "D") +
   theme(plot.tag = element_text(size = 12, face = "bold"),
         axis.title = element_text(size = 12))
 ```
@@ -291,7 +291,7 @@ fosplot <-
   ylab("ln(bite-force) (N)") + 
   ylim(-3, 7) +
   theme(legend.position = "right", legend.title = element_blank()) +
-  labs(tag = "D") +
+  labs(tag = "E") +
   theme(plot.tag = element_text(size = 12, face = "bold"),
         axis.title = element_text(size = 12))
 ```
@@ -335,7 +335,7 @@ saxplot <-
   ylab("ln(bite-force) (N)") + 
   ylim(-3, 7) +
   theme(legend.position = "right", legend.title = element_blank()) +
-  labs(tag = "E") +
+  labs(tag = "F") +
   theme(plot.tag = element_text(size = 12, face = "bold"),
         axis.title = element_text(size = 12))
 ```
@@ -373,14 +373,14 @@ acrodontplot <-
   ylab("ln(bite-force) (N)") + 
   ylim(-3, 7) +
   theme(legend.position = "right", legend.title = element_blank()) +
-  labs(tag = "F") +
+  labs(tag = "C") +
   theme(plot.tag = element_text(size = 12, face = "bold"),
         axis.title = element_text(size = 12))
 ```
 
 ```{r}
 # Plot all together
-higherplot + dietplot + arbplot + fosplot + saxplot + acrodontplot +
+higherplot + dietplot + acrodontplot + arbplot + fosplot + saxplot + 
   plot_layout(widths = c(2, 2), ncol = 2)
 
 # Save plot
