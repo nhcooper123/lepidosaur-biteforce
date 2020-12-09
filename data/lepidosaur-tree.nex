@@ -1,0 +1,325 @@
+#NEXUS
+[R-package APE, Tue Nov  3 12:15:59 2020]
+
+BEGIN TAXA;
+	DIMENSIONS NTAX = 156;
+	TAXLABELS
+		Tarentola_mauritanica
+		Gekko_gecko
+		Salvator_merianae
+		Tupinambis_teguixin
+		Dracaena_guianensis
+		Aspidoscelis_tigris
+		Aspidoscelis_sexlineatus
+		Trogonophis_wiegmanni
+		Acanthodactylus_erythrurus
+		Acanthodactylus_pardalis
+		Acanthodactylus_aureus
+		Latastia_longicaudata
+		Takydromus_sexlineatus
+		Dalmatolacerta_oxycephala
+		Archaeolacerta_bedriagae
+		Iberolacerta_horvathi
+		Iberolacerta_monticola
+		Lacerta_bilineata
+		Lacerta_schreiberi
+		Lacerta_trilineata
+		Podarcis_siculus
+		Podarcis_muralis
+		Podarcis_melisellensis
+		Podarcis_tiliguerta
+		Podarcis_liolepis
+		Podarcis_hispanicus
+		Podarcis_lilfordi
+		Podarcis_erhardii
+		Podarcis_peloponnesiacus
+		Zootoca_vivipara
+		Psammodromus_hispanicus
+		Psammodromus_algirus
+		Gallotia_galloti
+		Gallotia_caesaris
+		Gallotia_intermedia
+		Gallotia_bravoana
+		Gallotia_simonyi
+		Gallotia_stehlini
+		Gallotia_atlantica
+		Bradypodion_damaranum
+		Bradypodion_pumilum
+		Bradypodion_caffer
+		Bradypodion_occidentale
+		Bradypodion_ventrale
+		Bradypodion_taeniabronchum
+		Bradypodion_setaroi
+		Bradypodion_melanocephalum
+		Bradypodion_thamnobates
+		Bradypodion_nemorale
+		Bradypodion_transvaalense
+		Uromastix_acanthinura
+		Uromastyx_aegyptia
+		Ctenophorus_maculosus
+		Pogona_vitticeps
+		Stellagama_stellio
+		Sauromalus_ater
+		Dipsosaurus_dorsalis
+		Liolaemus_hatcheri
+		Liolaemus_kolengh
+		Liolaemus_zullyae
+		Liolaemus_kingii
+		Liolaemus_sarmientoi
+		Liolaemus_baguali
+		Liolaemus_escarchadosi
+		Liolaemus_rothi
+		Liolaemus_fitzingerii
+		Liolaemus_xanthoviridis
+		Liolaemus_canqueli
+		Liolaemus_morenoi
+		Liolaemus_kriegi
+		Liolaemus_elongatus
+		Liolaemus_petrophilus
+		Liolaemus_coeruleus
+		Liolaemus_bibronii
+		Liolaemus_tenuis
+		Anolis_chloris
+		Anolis_frenatus
+		Anolis_heterodermus
+		Anolis_baracoae
+		Anolis_equestris
+		Anolis_coelestinus
+		Anolis_singularis
+		Anolis_bahorucoensis
+		Anolis_allisoni
+		Anolis_smaragdinus
+		Anolis_brunneus
+		Anolis_carolinensis
+		Anolis_sheplani
+		Anolis_angusticeps
+		Anolis_sagrei
+		Anolis_lineatopus
+		Anolis_valencienni
+		Anolis_garmani
+		Anolis_grahami
+		Anolis_auratus
+		Anolis_humilis
+		Anolis_poecilopus
+		Anolis_oxylophus
+		Anolis_lionotus
+		Anolis_limifrons
+		Anolis_aquaticus
+		Anolis_brevirostris
+		Anolis_distichus
+		Anolis_stratulus
+		Anolis_evermanni
+		Anolis_krugi
+		Anolis_pulchellus
+		Anolis_gundlachi
+		Anolis_cristatellus
+		Anolis_oculatus
+		Anolis_cybotes
+		Anolis_cuvieri
+		Anolis_barahonae
+		Anolis_olssoni
+		Cophosaurus_texanus
+		Callisaurus_draconoides
+		Sceloporus_undulatus
+		Sceloporus_clarkii
+		Sceloporus_magister
+		Urosaurus_ornatus
+		Uta_stansburiana
+		Crotaphytus_collaris
+		Crotaphytus_antiquus
+		Tropidurus_hispidus
+		Eurolophosaurus_nanuzae
+		Varanus_exanthematicus
+		Xenosaurus_grandis
+		Xenosaurus_platyceps
+		Elgaria_kingii
+		Ouroborus_cataphractus
+		Karusasaurus_polyzonus
+		Smaug_mossambicus
+		Typhlosaurus_lomiae
+		Typhlosaurus_vermis
+		Typhlosaurus_caecus
+		Acontias_litoralis
+		Acontias_meleagris
+		Acontias_percivali
+		Acontias_kgalagadi
+		Scincus_scincus
+		Chalcides_sepsoides
+		Chalcides_ocellatus
+		Scelotes_bipes
+		Scelotes_montispectus
+		Pygomeles_braconnieri
+		Eremiascincus_isolepis
+		Eulamprus_heatwolei
+		Ctenotus_inornatus
+		Ctenotus_robustus
+		Tiliqua_rugosa
+		Corucia_zebrata
+		Cryptoblepharus_metallicus
+		Carlia_triacantha
+		Mochlus_sundevallii
+		Ablepharus_kitaibelii
+		Sphenodon_punctatus
+	;
+END;
+BEGIN TREES;
+	TRANSLATE
+		1	Tarentola_mauritanica,
+		2	Gekko_gecko,
+		3	Salvator_merianae,
+		4	Tupinambis_teguixin,
+		5	Dracaena_guianensis,
+		6	Aspidoscelis_tigris,
+		7	Aspidoscelis_sexlineatus,
+		8	Trogonophis_wiegmanni,
+		9	Acanthodactylus_erythrurus,
+		10	Acanthodactylus_pardalis,
+		11	Acanthodactylus_aureus,
+		12	Latastia_longicaudata,
+		13	Takydromus_sexlineatus,
+		14	Dalmatolacerta_oxycephala,
+		15	Archaeolacerta_bedriagae,
+		16	Iberolacerta_horvathi,
+		17	Iberolacerta_monticola,
+		18	Lacerta_bilineata,
+		19	Lacerta_schreiberi,
+		20	Lacerta_trilineata,
+		21	Podarcis_siculus,
+		22	Podarcis_muralis,
+		23	Podarcis_melisellensis,
+		24	Podarcis_tiliguerta,
+		25	Podarcis_liolepis,
+		26	Podarcis_hispanicus,
+		27	Podarcis_lilfordi,
+		28	Podarcis_erhardii,
+		29	Podarcis_peloponnesiacus,
+		30	Zootoca_vivipara,
+		31	Psammodromus_hispanicus,
+		32	Psammodromus_algirus,
+		33	Gallotia_galloti,
+		34	Gallotia_caesaris,
+		35	Gallotia_intermedia,
+		36	Gallotia_bravoana,
+		37	Gallotia_simonyi,
+		38	Gallotia_stehlini,
+		39	Gallotia_atlantica,
+		40	Bradypodion_damaranum,
+		41	Bradypodion_pumilum,
+		42	Bradypodion_caffer,
+		43	Bradypodion_occidentale,
+		44	Bradypodion_ventrale,
+		45	Bradypodion_taeniabronchum,
+		46	Bradypodion_setaroi,
+		47	Bradypodion_melanocephalum,
+		48	Bradypodion_thamnobates,
+		49	Bradypodion_nemorale,
+		50	Bradypodion_transvaalense,
+		51	Uromastix_acanthinura,
+		52	Uromastyx_aegyptia,
+		53	Ctenophorus_maculosus,
+		54	Pogona_vitticeps,
+		55	Stellagama_stellio,
+		56	Sauromalus_ater,
+		57	Dipsosaurus_dorsalis,
+		58	Liolaemus_hatcheri,
+		59	Liolaemus_kolengh,
+		60	Liolaemus_zullyae,
+		61	Liolaemus_kingii,
+		62	Liolaemus_sarmientoi,
+		63	Liolaemus_baguali,
+		64	Liolaemus_escarchadosi,
+		65	Liolaemus_rothi,
+		66	Liolaemus_fitzingerii,
+		67	Liolaemus_xanthoviridis,
+		68	Liolaemus_canqueli,
+		69	Liolaemus_morenoi,
+		70	Liolaemus_kriegi,
+		71	Liolaemus_elongatus,
+		72	Liolaemus_petrophilus,
+		73	Liolaemus_coeruleus,
+		74	Liolaemus_bibronii,
+		75	Liolaemus_tenuis,
+		76	Anolis_chloris,
+		77	Anolis_frenatus,
+		78	Anolis_heterodermus,
+		79	Anolis_baracoae,
+		80	Anolis_equestris,
+		81	Anolis_coelestinus,
+		82	Anolis_singularis,
+		83	Anolis_bahorucoensis,
+		84	Anolis_allisoni,
+		85	Anolis_smaragdinus,
+		86	Anolis_brunneus,
+		87	Anolis_carolinensis,
+		88	Anolis_sheplani,
+		89	Anolis_angusticeps,
+		90	Anolis_sagrei,
+		91	Anolis_lineatopus,
+		92	Anolis_valencienni,
+		93	Anolis_garmani,
+		94	Anolis_grahami,
+		95	Anolis_auratus,
+		96	Anolis_humilis,
+		97	Anolis_poecilopus,
+		98	Anolis_oxylophus,
+		99	Anolis_lionotus,
+		100	Anolis_limifrons,
+		101	Anolis_aquaticus,
+		102	Anolis_brevirostris,
+		103	Anolis_distichus,
+		104	Anolis_stratulus,
+		105	Anolis_evermanni,
+		106	Anolis_krugi,
+		107	Anolis_pulchellus,
+		108	Anolis_gundlachi,
+		109	Anolis_cristatellus,
+		110	Anolis_oculatus,
+		111	Anolis_cybotes,
+		112	Anolis_cuvieri,
+		113	Anolis_barahonae,
+		114	Anolis_olssoni,
+		115	Cophosaurus_texanus,
+		116	Callisaurus_draconoides,
+		117	Sceloporus_undulatus,
+		118	Sceloporus_clarkii,
+		119	Sceloporus_magister,
+		120	Urosaurus_ornatus,
+		121	Uta_stansburiana,
+		122	Crotaphytus_collaris,
+		123	Crotaphytus_antiquus,
+		124	Tropidurus_hispidus,
+		125	Eurolophosaurus_nanuzae,
+		126	Varanus_exanthematicus,
+		127	Xenosaurus_grandis,
+		128	Xenosaurus_platyceps,
+		129	Elgaria_kingii,
+		130	Ouroborus_cataphractus,
+		131	Karusasaurus_polyzonus,
+		132	Smaug_mossambicus,
+		133	Typhlosaurus_lomiae,
+		134	Typhlosaurus_vermis,
+		135	Typhlosaurus_caecus,
+		136	Acontias_litoralis,
+		137	Acontias_meleagris,
+		138	Acontias_percivali,
+		139	Acontias_kgalagadi,
+		140	Scincus_scincus,
+		141	Chalcides_sepsoides,
+		142	Chalcides_ocellatus,
+		143	Scelotes_bipes,
+		144	Scelotes_montispectus,
+		145	Pygomeles_braconnieri,
+		146	Eremiascincus_isolepis,
+		147	Eulamprus_heatwolei,
+		148	Ctenotus_inornatus,
+		149	Ctenotus_robustus,
+		150	Tiliqua_rugosa,
+		151	Corucia_zebrata,
+		152	Cryptoblepharus_metallicus,
+		153	Carlia_triacantha,
+		154	Mochlus_sundevallii,
+		155	Ablepharus_kitaibelii,
+		156	Sphenodon_punctatus
+	;
+	TREE * UNTITLED = [&R] (((1:76.06892885,2:76.06892885):96.71085447,(((((3:76.1973112,(4:32.527663,5:32.527663):43.66964819):33.34002944,(6:44.34963317,7:44.34963317):65.18770746):48.02743518,(8:126.5999996,(((((9:40.0849395,10:40.0849395):18.22419315,11:58.30913265):20.77075075,12:79.0798834):7.458420736,(13:79.94751263,(((14:68.42025288,(15:66.00215646,(16:43.040241,17:43.040241):22.96191546):2.418096424):2.939286318,((18:34.058247,(19:31.136486,20:31.136486):2.921761):34.9321884,(((21:29.77337,22:29.77337):4.248457833,(23:32.3567495,24:32.3567495):1.665078333):4.244954644,((25:29.920345,26:29.920345):6.039449125,(27:31.04832117,(28:21.662348,29:21.662348):9.385973167):4.911472958):2.306988352):30.72365292):2.369103799):5.912183864,30:77.27172306):2.675789566):6.590791512):12.44930712,((31:64.892593,32:64.892593):12.81038329,(((33:33.64247675,(34:29.20484567,(35:12.2568455,(36:3.176281,37:3.176281):9.0805645):16.94800017):4.437631083):20.61664705,38:54.2591238):5.495898533,39:59.75502233):17.94795395):21.28463498):27.61238837):30.96477618):5.476848503,(((((40:33.719987,41:33.719987):12.81218981,(42:35.23687679,(((43:24.9572541,(44:5.993542,45:5.993542):18.96371209):7.683903483,46:32.64115758):0.4669570595,((47:4.821742,48:4.821742):22.125373,(49:20.899994,50:20.899994):6.047121):6.160999643):2.128762149):11.29530002):74.45619958,((51:46.89156271,52:46.89156271):68.0206669,((53:45.0644873,54:45.0644873):58.17211495,55:103.2366023):11.67562735):6.076146783):25.41162323,((((56:90.87658841,57:90.87658841):27.62159837,((((((58:31.192199,59:31.192199):7.415293731,((60:7.652209375,(61:6.444359,62:6.444359):1.207850375):4.577685839,(63:5.250541,64:5.250541):6.979354214):26.37759751):17.38619067,(65:41.90815775,((66:8.964558,67:8.964558):9.024795667,(68:14.66664,69:14.66664):3.322713667):23.91880409):14.08552565):7.867000985,((((70:10.991691,71:10.991691):22.624542,72:33.616233):17.84296366,(73:43.08383317,74:43.08383317):8.375363491):7.274671537,75:58.73386819):5.126816194):50.63045148,((76:57.53381905,(77:55.73711402,78:55.73711401):1.796705028):15.04454947,((((79:5.689275,80:5.689275):48.087793,(81:42.936082,82:42.936082):10.840986):3.723105,83:57.500173):6.397442593,((((((((84:10.637385,85:10.637385):5.290841,86:15.928226):7.004254,87:22.93248):17.41025783,(88:37.61470267,89:37.61470267):2.728035167):15.18480053,((90:46.19959507,(((91:37.167087,(92:34.27018,(93:16.372927,94:16.372927):17.897253):2.896907):1.020330563,95:38.18741756):3.419612358,((96:29.0420435,((97:14.106066,(98:11.862737,99:11.862737):2.243329):3.005238,100:17.111304):11.9307395):10.93360685,101:39.97565035):1.631379574):4.592565147):7.51040463,(((102:24.43256675,103:24.43256675):18.28256155,((104:17.334119,105:17.334119):18.333173,(((106:17.42403,107:17.42403):8.4627655,108:25.8867955):3.828222417,109:29.71501792):5.952274083):7.0478363):4.570519964,110:47.28564826):6.424351434):1.817538668):1.985043491,111:57.51258186):1.584688416,(112:41.316743,113:41.316743):17.78052727):1.742559825,114:60.8398301):3.057785495):8.680752926):41.91276735):2.104637061,((115:49.57520687,116:49.57520687):43.86613309,((((117:45.04678148,118:45.04678147):6.351554547,119:51.39833602):33.17315376,120:84.57148979):2.018980636,121:86.59047042):6.850869533):23.15443297):1.902413855):2.117530036,(122:44.86271383,123:44.86271383):75.75300299):2.288527206,(124:58.86368312,125:58.86368313):64.04056091):23.49575559):11.46561844,(126:118.0000004,((127:18.00296,128:18.00296):89.8264528,129:107.8294128):10.17058756):39.86561769):5.176006259):6.470276752,((130:64.54594042,(131:62.02801269,132:62.0280127):2.517927728):95.37888096,((((133:3.488955,134:3.488955):26.245682,135:29.734637):32.96684327,(136:47.83472631,((137:31.89859142,138:31.89859142):7.31619694,139:39.21478836):8.619937955):14.86675396):31.69851949,((140:83.48370591,((141:30.684841,142:30.684841):42.46817464,((143:22.46495475,144:22.46495475):47.23024928,145:69.69520402):3.457811619):10.33069026):3.538584095,((146:48.75172021,(147:47.20199923,(148:20.5993485,149:20.5993485):26.60265073):1.54972098):32.70761311,((150:50.35536484,151:50.35536484):25.50628764,((152:53.78569301,153:53.78569302):19.79679292,(154:67.184652,155:67.184652):6.39783394):2.279166542):5.597680836):5.562956684):7.377709759):65.52482162):9.587079688):3.267882247):55.22021624,156:227.9999995);
+END;

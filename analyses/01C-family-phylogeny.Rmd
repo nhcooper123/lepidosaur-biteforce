@@ -1,0 +1,107 @@
+---
+title: "Create family level phylogeny"
+output: html_document
+---
+
+Load libraries
+```{r, message = FALSE, warning = FALSE}
+library(ape)
+library(geiger)
+library(tidyverse)
+library(phytools)
+library(here)
+```
+
+Read in data and phylogeny
+```{r, message = FALSE, warning = FALSE}
+ds <- read_csv(here("raw-data/Meiri2018_AppendixS1.csv"))
+lepidosaurtree <- read.tree(here("raw-data/WrightTree.nex"))
+str(lepidosaurtree)
+```
+
+Edit some Family names to ensure all Uetz families are represented, and omit some species that are actually not in the Pyron tree, even though it says they are in Meiri 2018.
+```{r}
+ds <-
+  ds %>%
+  mutate(Family = case_when(Genus == "Celestus" | Genus == "Diploglossus"
+                            ~ "Diploglossidae", 
+                            Genus == "Alopoglossus" ~ "Alopoglossidae",
+                            Family == "Anniellidae" ~ "Anguidae",
+                            Family == "Trogonophiidae" ~ "Trogonophidae",
+                            TRUE ~ as.character(Family))) %>%
+  
+  filter(Binomial != "Acratosaura mentalis") %>%
+  filter(Binomial != "Amalosia lesueurii") %>%
+  filter(Binomial != "Broadleysaurus major") %>%
+  filter(Binomial != "Amalosia obscura") %>%
+  filter(Binomial != "Amalosia rhombifer") 
+```
+
+Select one species per family
+```{r}
+ds1 <- 
+  ds %>%
+    select(Binomial, Family, Phylogeny) %>%
+    mutate(pyron = str_detect(Phylogeny, "Pyron and Burbrink 2014")) %>%
+    filter(pyron == TRUE)
+
+ds_one <-
+  ds1 %>%
+    mutate(dup = duplicated(ds1$Family)) %>%
+    filter(dup != TRUE) %>%
+    select(Binomial, Family)
+```
+
+Add Sphendon
+```{r}
+ds_one <- 
+  rbind(ds_one, data.frame(Binomial = "Sphenodon punctatus", 
+                           Family = "Sphenodontidae"))
+```
+
+
+Replace spaces with underscores (_) so they match up with species names in the tree
+```{r}
+ds_one <-
+  ds_one %>%
+  mutate(tips = str_replace(Binomial, " ", "_"))
+
+# Look at it
+ds_one
+```
+
+Identify mismatches between species in the data and phylogenies
+```{r}
+check <- name.check(phy = lepidosaurtree, 
+                    data = ds_one, data.names = ds_one$tips)
+
+# This should be 0
+check$data_not_tree
+```
+
+Drop species missing from the trees which are not in our data using drop.tip
+```{r}
+familytree <- drop.tip(lepidosaurtree, check$tree_not_data)
+# Look at it
+# Should have 44 tips
+familytree
+```
+
+Replace tip labels with Family names
+```{r}
+# Sort data by tree tip labels
+ds_one <- ds_one[match(familytree$tip.label, ds_one$tips), ]
+
+# Replace species tips with family names
+for(x in 1:length(ds_one$tips)){
+  family <- ds_one$Family[x]
+  tip <- familytree$tip.label[x]
+  familytree$tip.label <- gsub(tip, family, familytree$tip.label)
+}
+```
+
+Save tree for future use
+```{r}
+write.nexus(familytree, file = here("data/family-tree.nex"))
+```
+                                

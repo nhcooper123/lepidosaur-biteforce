@@ -1,0 +1,551 @@
+---
+title: "Exploring the data: distribution of biteforce"
+author: "Natalie Cooper"
+---
+
+Load libraries
+```{r}
+library(ape)
+library(tidyverse)
+library(geiger)
+library(tidytree)
+library(treeio)
+library(ggtree)
+library(knitr)
+library(ggstance)
+library(patchwork)
+library(here)
+
+# Helper functions for plotting
+remove_y <- 
+  theme(axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+
+remove_x <- 
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+
+# Colour palette
+sf_colours <- c("#ffc100", "#47b881", "#5588ff", 
+                "#efbbff", "#ff7400", "#090088", "#800080")
+
+# "Acrodonta"    #ffc100 = yellow   
+# "Anguimorpha"     #47b881 = green
+# "Dibamia"     "brown"    
+# "Gekkota" #5588ff = lighter blue       
+# "Lacertoidea"    #efbbff = pink
+# "Pleurodonta"     #ff7400 = orange
+# "Rhynchocephalia" #090088 = dark blue
+# "Scincoidea" #800080 = purple
+```
+
+Read in the data
+```{r, message = FALSE}
+ds1 <- read_csv(here("data/max_bf.csv"))
+ds1_male <- read_csv(here("data/max_bf_males.csv"))
+ds1_female <- read_csv(here("data/max_bf_females.csv"))
+
+## Remove the species not in the tree and therefore not in the analyses
+ds1 <-
+  ds1 %>%
+  filter(BinomialReptileDatabase != "Diplolaemus leopardinus" &
+          BinomialReptileDatabase != "Tropidurus semitaeniatus" &
+           BinomialReptileDatabase != "Aspidoscelis sonorae")
+
+ds1_male <-
+  ds1_male %>%
+  filter(BinomialReptileDatabase != "Diplolaemus leopardinus" &
+          BinomialReptileDatabase != "Tropidurus semitaeniatus" &
+           BinomialReptileDatabase != "Aspidoscelis sonorae")
+
+ds1_female <-
+  ds1_female %>%
+  filter(BinomialReptileDatabase != "Diplolaemus leopardinus" &
+          BinomialReptileDatabase != "Tropidurus semitaeniatus" &
+           BinomialReptileDatabase != "Aspidoscelis sonorae")
+
+
+# Stick the datasets together
+both1 <- rbind(ds1_female, ds1_male)
+
+# And for all the data
+ds1a <-
+  ds1 %>%
+  mutate(Sex = rep("Both", length(ds1$Sex)))
+
+all <- rbind(both1, ds1a)
+```
+
+First let's look at bite force per family
+```{r}
+family_bf1 <-
+  ds1 %>%
+  group_by(Family, HigherTaxonomy) %>%
+  summarise(MeanBF = round(mean(log(max_bf)), digits = 3),
+            SeBF = round(sd(log(max_bf))/sqrt(n()), digits = 3),
+            n())
+
+family_bf1
+
+#write_csv(family_bf1, path = here("tables/bite-force-by-family.csv"))
+```
+
+```{r}
+ggplot(ds1, aes(y = log(max_bf), x = Family, colour = HigherTaxonomy)) + 
+  geom_point(alpha = 0.5) +
+  geom_point(data = family_bf1, aes(y = MeanBF), size = 3) +
+  geom_errorbar(data = family_bf1, 
+                aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
+                show.legend = FALSE, width = 0.4) +
+  scale_colour_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  #scale_y_continuous(breaks=seq(0,45,5)) +
+  xlab("Family") +
+  ylab("ln(bite-force) (N)") + 
+  ylim(-3, 7) +
+  theme(legend.position = "right", legend.title = element_blank())
+
+# Save plot
+#ggsave(here("figures/bite-force-by-family.png"), height = 5)
+```
+
+Bite force per higher grouping
+```{r}
+higher_bf1 <-
+  ds1 %>%
+  group_by(HigherTaxonomy) %>%
+  summarise(MeanBF = round(mean(log(max_bf)), digits = 3),
+            SeBF = round(sd(log(max_bf))/sqrt(n()), digits = 3),
+            n())
+
+higher_bf1
+
+#write_csv(higher_bf1, path = here("tables/bite-force-by-higher.csv"))
+```
+
+```{r}
+ggplot(ds1, aes(y = log(max_bf), x = HigherTaxonomy, colour = HigherTaxonomy)) + 
+  geom_point(alpha = 0.5) +
+  geom_point(data = higher_bf1, aes(y = MeanBF), size = 3) +
+  geom_errorbar(data = higher_bf1, 
+                aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
+                show.legend = FALSE, width = 0.2) +
+  scale_colour_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  xlab("Family") +
+  ylab("ln(bite-force) (N)") + 
+  ylim(-3, 7) +
+  theme(legend.position = "right", legend.title = element_blank())
+
+# Save plot
+#ggsave(here("figures/bite-force-by-higher.png"), height = 5, width = 7)
+```
+
+Bite force per higher grouping
+```{r}
+higher_bf1 <-
+  ds1 %>%
+  group_by(HigherTaxonomy) %>%
+  summarise(MeanBF = round(mean(log(max_bf)), digits = 3),
+            SeBF = round(sd(log(max_bf))/sqrt(n()), digits = 3),
+            n())
+
+higher_bf1
+
+#write_csv(higher_bf1, path = here("tables/bite-force-by-higher.csv"))
+```
+
+```{r}
+higherplot <-
+  ggplot(ds1, aes(y = log(max_bf), x = HigherTaxonomy, colour = HigherTaxonomy)) + 
+  geom_jitter(alpha = 0.5, width = 0.2) +
+  geom_point(data = higher_bf1, aes(y = MeanBF), size = 3) +
+  geom_errorbar(data = higher_bf1, 
+                aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
+                show.legend = FALSE, width = 0.2) +
+  scale_colour_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  xlab("") +
+  ylab("ln(bite-force) (N)") + 
+  ylim(-3, 7) +
+  theme(legend.position = "none", legend.title = element_blank()) +
+  labs(tag = "A") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12))
+
+# Save plot
+#ggsave(here("figures/bite-force-by-higher.png"), height = 5, width = 7)
+```
+
+Bite force per diet
+```{r}
+diet_bf1 <-
+  ds1 %>%
+  filter(!is.na(Diet)) %>%
+  group_by(Diet) %>%
+  summarise(MeanBF = round(mean(log(max_bf)), digits = 3),
+            SeBF = round(sd(log(max_bf))/sqrt(n()), digits = 3),
+            n())
+
+diet_bf1
+
+#write_csv(diet_bf1, path = here("tables/bite-force-by-diet.csv"))
+```
+
+```{r}
+# Remove NAs
+ds1_diet <- filter(ds1, !is.na(Diet))
+
+dietplot <-
+  ggplot(ds1_diet, aes(y = log(max_bf), x = Diet)) + 
+  geom_jitter(alpha = 0.5, width = 0.2) +
+  geom_point(data = diet_bf1, aes(y = MeanBF), size = 3, col = "red") +
+  geom_errorbar(data = diet_bf1, 
+                aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
+                show.legend = FALSE, width = 0.2, col = "red") +
+  scale_colour_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  xlab("") +
+  ylab("ln(bite-force) (N)") + 
+  ylim(-3, 7) +
+  theme(legend.position = "right", legend.title = element_blank()) +
+  labs(tag = "B") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12))
+```
+
+Bite force per arboreality
+```{r}
+arb_bf1 <-
+  ds1 %>%
+  filter(!is.na(arboreal)) %>%
+  group_by(arboreal) %>%
+  summarise(MeanBF = round(mean(log(max_bf)), digits = 3),
+            SeBF = round(sd(log(max_bf))/sqrt(n()), digits = 3),
+            n())
+
+arb_bf1
+
+#write_csv(arb_bf1, path = here("tables/bite-force-by-arboreal.csv"))
+```
+
+```{r}
+# Remove NAs
+ds1_arb <- filter(ds1, !is.na(arboreal))
+
+arbplot <-
+  ggplot(ds1_arb, aes(y = log(max_bf), x = arboreal)) + 
+  geom_jitter(alpha = 0.5, width = 0.2) +
+  geom_point(data = arb_bf1, aes(y = MeanBF), size = 3, col = "red") +
+  geom_errorbar(data = arb_bf1, 
+                aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
+                show.legend = FALSE, width = 0.2, col = "red") +
+  scale_colour_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  xlab("") +
+  ylab("ln(bite-force) (N)") + 
+  ylim(-3, 7) +
+  theme(legend.position = "right", legend.title = element_blank()) +
+  labs(tag = "C") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12))
+```
+
+Bite force per fossoriality
+```{r}
+fos_bf1 <-
+  ds1 %>%
+  filter(!is.na(fossorial)) %>%
+  group_by(fossorial) %>%
+  summarise(MeanBF = round(mean(log(max_bf)), digits = 3),
+            SeBF = round(sd(log(max_bf))/sqrt(n()), digits = 3),
+            n())
+
+fos_bf1
+
+#write_csv(fos_bf1, path = here("tables/bite-force-by-fossorial.csv"))
+```
+
+```{r}
+# Remove NAs
+ds1_fos <- filter(ds1, !is.na(fossorial))
+
+fosplot <-
+  ggplot(ds1_fos, aes(y = log(max_bf), x = fossorial)) + 
+  geom_jitter(alpha = 0.5, width = 0.2) +
+  geom_point(data = fos_bf1, aes(y = MeanBF), size = 3, col = "red") +
+  geom_errorbar(data = fos_bf1, 
+                aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
+                show.legend = FALSE, width = 0.2, col = "red") +
+  scale_colour_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  xlab("") +
+  ylab("ln(bite-force) (N)") + 
+  ylim(-3, 7) +
+  theme(legend.position = "right", legend.title = element_blank()) +
+  labs(tag = "D") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12))
+```
+
+Bite force per saxicolous
+```{r}
+sax_bf1 <-
+  ds1 %>%
+  # Relevel
+  mutate(saxicolous = relevel(as.factor(saxicolous), ref = "Saxicolous")) %>%
+  filter(!is.na(saxicolous)) %>%
+  group_by(saxicolous) %>%
+  summarise(MeanBF = round(mean(log(max_bf)), digits = 3),
+            SeBF = round(sd(log(max_bf))/sqrt(n()), digits = 3),
+            n())
+
+sax_bf1
+
+#write_csv(sax_bf1, path = here("tables/bite-force-by-saxicolous.csv"))
+```
+
+```{r}
+# Remove NAs
+ds1_sax <- 
+  ds1 %>%
+  # Relevel
+  mutate(saxicolous = relevel(as.factor(saxicolous), ref = "Saxicolous")) %>%
+  filter(!is.na(saxicolous))
+
+saxplot <-
+  ggplot(ds1_sax, aes(y = log(max_bf), x = saxicolous)) + 
+  geom_jitter(alpha = 0.5, width = 0.2) +
+  geom_point(data = sax_bf1, aes(y = MeanBF), size = 3, col = "red") +
+  geom_errorbar(data = sax_bf1, 
+                aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
+                show.legend = FALSE, width = 0.2, col = "red") +
+  scale_colour_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  xlab("") +
+  ylab("ln(bite-force) (N)") + 
+  ylim(-3, 7) +
+  theme(legend.position = "right", legend.title = element_blank()) +
+  labs(tag = "E") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12))
+```
+
+Bite force by tooth attachment
+```{r}
+acrodont_bf1 <-
+  ds1 %>%
+  filter(!is.na(acrodont)) %>%
+  group_by(acrodont) %>%
+  summarise(MeanBF = round(mean(log(max_bf)), digits = 3),
+            SeBF = round(sd(log(max_bf))/sqrt(n()), digits = 3),
+            n())
+
+acrodont_bf1
+
+#write_csv(acrodont_bf1, path = here("tables/bite-force-by-acrodont.csv"))
+```
+
+```{r}
+#
+ds1_acrodont <- filter(ds1, !is.na(acrodont))
+
+acrodontplot <-
+  ggplot(ds1_acrodont, aes(y = log(max_bf), x = acrodont)) + 
+  geom_jitter(alpha = 0.5, width = 0.2) +
+  geom_point(data = acrodont_bf1, aes(y = MeanBF), size = 3, col = "red") +
+  geom_errorbar(data = acrodont_bf1, 
+                aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
+                show.legend = FALSE, width = 0.2, col = "red") +
+  scale_colour_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  xlab("") +
+  ylab("ln(bite-force) (N)") + 
+  ylim(-3, 7) +
+  theme(legend.position = "right", legend.title = element_blank()) +
+  labs(tag = "F") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12))
+```
+
+```{r}
+# Plot all together
+higherplot + dietplot + arbplot + fosplot + saxplot + acrodontplot +
+  plot_layout(widths = c(2, 2), ncol = 2)
+
+# Save plot
+#ggsave(here("figures/bite-force-by-ecology.png"), height = 7)
+```
+
+
+
+## Males and females
+
+```{r}
+family_both1 <-
+  both1 %>%
+  group_by(Sex, Family, HigherTaxonomy) %>%
+  summarise(MeanBF = round(mean(log(max_bf)), digits = 3),
+            SeBF = round(sd(log(max_bf))/sqrt(n()), digits = 3),
+            n())
+
+family_both1 
+
+#write_csv(family_both1, path = here("tables/bite-force-by-family-sex.csv"))
+```
+
+```{r}
+ggplot(both1, aes(y = log(max_bf), x = Family, colour = HigherTaxonomy)) + 
+  geom_point(alpha = 0.5) +
+  geom_point(data = family_both1, aes(y = MeanBF), size = 3) +
+  geom_errorbar(data = family_both1, 
+                aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
+                show.legend = FALSE, width = 0.4) +
+  scale_colour_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  #scale_y_continuous(breaks=seq(0,45,5)) +
+  xlab("Family") +
+  ylab("ln(bite-force) (N)") + 
+  ylim(-3, 7) +
+  theme(legend.position = "right", legend.title = element_blank(),
+        strip.background = element_rect(fill="white")) +
+  facet_wrap(~Sex, ncol = 1)
+
+# Save plot
+#ggsave(here("figures/bite-force-by-family-sex.png"), height = 6)
+```
+
+Bite force per higher grouping
+```{r}
+higher_both1 <-
+  both1 %>%
+  group_by(Sex, HigherTaxonomy) %>%
+  summarise(MeanBF = round(mean(log(max_bf)), digits = 3),
+            SeBF = round(sd(log(max_bf))/sqrt(n()), digits = 3),
+            n())
+
+higher_both1
+
+#write_csv(higher_both1, path = here("tables/bite-force-by-higher-sex.csv"))
+```
+
+```{r}
+ggplot(both1, aes(y = log(max_bf), x = HigherTaxonomy, colour = HigherTaxonomy)) + 
+  geom_point(alpha = 0.5) +
+  geom_point(data = higher_both1, aes(y = MeanBF), size = 3) +
+  geom_errorbar(data = higher_both1, 
+                aes(y = MeanBF, ymin = MeanBF - SeBF, ymax = MeanBF + SeBF), 
+                show.legend = FALSE, width = 0.2) +
+  scale_colour_manual(values = sf_colours) +
+  coord_flip() +
+  theme_bw(base_size = 14) +
+  xlab("Family") +
+  ylab("ln(bite-force) (N)") + 
+  ylim(-3, 7) +
+  theme(legend.position = "right", legend.title = element_blank(),
+        strip.background = element_rect(fill="white")) +
+  facet_wrap(~Sex, ncol = 1)
+
+# Save plot
+#ggsave(here("figures/bite-force-by-higher-sex.png"), height = 5)
+```
+
+## Density plots
+
+```{r}
+bf <-  
+  ggplot(all, aes(x=log(max_bf), colour = Sex)) +
+  geom_density() +
+  theme_bw(base_size = 14) +
+  xlab("ln(bite-force) (N)") +
+  scale_colour_manual(values = c("black", "orange1", "seagreen")) +
+  theme(legend.position = "top") +
+  xlim(-2.5,6) +
+  annotate(geom = "text", x = 5.5, y = 0.3, label = "n = 161", size = 4) +
+  annotate(geom = "text", x = 5.5, y = 0.25, label = "n = 112", size = 4, colour = "orange1") +
+  annotate(geom = "text", x = 5.5, y = 0.2, label = "n = 132", size = 4, colour = "seagreen") +
+      labs(tag = "A") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12))
+
+svl <-  
+  ggplot(all, aes(x=log(max_svl), colour = Sex)) +
+  geom_density() +
+  theme_bw(base_size = 14) +
+  xlab("ln(SVL) (mm)") +
+  ylim(0, 1.5) +
+  xlim(0, 6) +
+  scale_colour_manual(values = c("black", "orange1", "seagreen")) +
+  theme(legend.position = "none") +
+  annotate(geom = "text", x = 5.2, y = 1.4, label = "n = 161", size = 4) +
+  annotate(geom = "text", x = 5.2, y = 1.25, label = "n = 112", size = 4, colour = "orange1") +
+  annotate(geom = "text", x = 5.2, y = 1.1, label = "n = 132", size = 4, colour = "seagreen") +
+      labs(tag = "B") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12))
+
+
+hw <-  
+  ggplot(all, aes(x=log(max_hw), colour = Sex)) +
+  geom_density() +
+  theme_bw(base_size = 14) +
+  xlab("ln(head width) (mm)") +
+  ylim(0, 1.5) +
+  xlim(0, 6) +
+  scale_colour_manual(values = c("black", "orange1", "seagreen")) +
+  theme(legend.position = "none") +
+  annotate(geom = "text", x = 5, y = 1.4, label = "n = 142", size = 4) +
+  annotate(geom = "text", x = 5, y = 1.25, label = "n = 96  ", size = 4, colour = "orange1") +
+  annotate(geom = "text", x = 5, y = 1.1, label = "n = 115", size = 4, colour = "seagreen") +
+      labs(tag = "C") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12))
+
+hl <-  
+  ggplot(all, aes(x=log(max_hl), colour = Sex)) +
+  geom_density() +
+  theme_bw(base_size = 14) +
+  xlab("ln(head length) (mm)") +
+  ylim(0, 1.5) +
+  xlim(0, 6) +
+  scale_colour_manual(values = c("black", "orange1", "seagreen")) +
+  theme(legend.position = "none") +
+  annotate(geom = "text", x = 5, y = 1.4, label = "n = 136", size = 4) +
+  annotate(geom = "text", x = 5, y = 1.25, label = "n = 97  ", size = 4, colour = "orange1") +
+  annotate(geom = "text", x = 5, y = 1.1, label = "n = 116", size = 4, colour = "seagreen") +
+      labs(tag = "D") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12))
+
+hh <-  
+  ggplot(all, aes(x=log(max_hh), colour = Sex)) +
+  geom_density() +
+  theme_bw(base_size = 14) +
+  xlab("ln(head height) (mm)") +
+  ylim(0, 1.5) +
+  xlim(0, 6) +
+  scale_colour_manual(values = c("black", "orange1", "seagreen")) +
+  theme(legend.position = "none") +
+  annotate(geom = "text", x = 5, y = 1.4, label = "n = 136", size = 4) +
+  annotate(geom = "text", x = 5, y = 1.25, label = "n = 96  ", size = 4, colour = "orange1") +
+  annotate(geom = "text", x = 5, y = 1.1, label = "n = 114", size = 4, colour = "seagreen") +
+      labs(tag = "E") +
+  theme(plot.tag = element_text(size = 12, face = "bold"),
+        axis.title = element_text(size = 12))
+
+bf / (svl + hw) / (hl + hh)
+
+# Save the plot
+# ggsave(here("figures/variable-density-plots-sex-all.png"), height = 8)
+```
