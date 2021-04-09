@@ -78,7 +78,17 @@ ds1a <-
 all <- rbind(both1, ds1a)
 ```
 
-First let's look at bite force per family
+
+First, what's the range of body sizes and BF?
+
+```{r}
+all %>%
+  summarise(min(max_svl), max(max_svl),
+            min(max_bf), max(max_bf))
+```
+
+
+Now let's look at bite force per family
 ```{r}
 family_bf1 <-
   ds1 %>%
