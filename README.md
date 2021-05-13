@@ -1,6 +1,6 @@
 # comparative analyses of bite-force among lepidosuars
 
-![alt text](https://github.com/nhcooper123/lepidosaur-biteforce/raw/master/manuscript/figures/phylogeny-data-coverage-colours.png)
+![alt text](https://github.com/nhcooper123/lepidosaur-biteforce/raw/main/manuscript/figures/phylogeny-data-coverage-colours.png)
 
 
 Author(s): Justin E Isip, Marc EH Jones and [Natalie Cooper](mailto:natalie.cooper.@nhm.ac.uk).
