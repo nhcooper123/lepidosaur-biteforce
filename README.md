@@ -1,4 +1,8 @@
-# comparative analyses of bite-force among lepidosuars
+# Comparative analyses of bite-force among lepidosuars
+
+Author(s): Justin E Isip, Marc EH Jones and [Natalie Cooper](mailto:natalie.cooper.@nhm.ac.uk).
+
+This repository contains all the code and some data used in the [paper](add link later). 
 
 ![alt text](https://github.com/nhcooper123/lepidosaur-biteforce/raw/main/figures/phylogeny-data-coverage-colours.png)
 
