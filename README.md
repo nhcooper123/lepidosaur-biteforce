@@ -23,7 +23,7 @@ Raw data are not included in this repo due to size limitations. All raw and clea
 If you use the cleaned data please cite as follows: 
 > Justin E Isip, Marc EH Jones and Natalie Cooper (2021). Dataset: Lepidosaur bite-force data. Natural History Museum Data Portal (data.nhm.ac.uk). https://doi.org/10.5519/dkrhpxjh.
 
-**Please cite the original sources of the data as follows where possible.**
+**Please cite the original sources of the data where possible.**
 
 The ecological data are all from Meiri et al (2018). Please cite this paper if you use these data!
 
