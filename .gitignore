@@ -37,5 +37,5 @@ raw-data/*
 *.fls
 *.pdf
 *.synctex.gz
-*.bld
+*.blg
 
