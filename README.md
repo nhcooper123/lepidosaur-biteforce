@@ -1,4 +1,4 @@
-# Comparative analyses of bite-force among lepidosuars
+# Comparative analyses of bite-force among lepidosaurs
 
 Author(s): Justin E Isip, Marc EH Jones and [Natalie Cooper](mailto:natalie.cooper.@nhm.ac.uk).
 
