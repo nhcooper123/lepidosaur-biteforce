@@ -28,3 +28,14 @@ raw-data/*
 # Mac
 *.DS_Store
 .Rproj.user
+
+# LaTeX
+*.aux
+*.log
+*.bbl
+*.fdb_latexmk
+*.fls
+*.pdf
+*.synctex.gz
+*.bld
+
