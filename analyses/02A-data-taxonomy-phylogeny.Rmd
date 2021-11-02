@@ -46,7 +46,7 @@ sf_colours_noS <- c("#ffc100", "#47b881", "brown", "#5588ff",
 
 ```
 
-Read in the tree and the data, including the bite force data and the summary taxonomy data from Uetz et al 2020 plus higher taxonomy from Burbrink et al 2019.
+Read in the tree and the data, including the bite force data and the summary taxonomy data from Uetz et al 2021 plus higher taxonomy from Burbrink et al 2019.
 
 ```{r}
 tree <- read.nexus(here("data/family-tree.nex"))
@@ -186,6 +186,18 @@ p1 + p2
 
 Ensure the data is in the same order as the tree and make it into a dataframe
 ```{r}
+# Create this again to put Sphenodon back in
+family_ds <-
+  ds %>%
+  group_by(Family) %>%
+  summarise(nBF = n()) %>%
+  full_join(taxa) %>%
+  mutate(percent_taxa = (nBF/Species_Uetz) * 100) %>%
+  mutate(percent_studies = (nBF/164) * 100) %>%
+  select(HigherTaxonomy, everything()) %>%
+  arrange(HigherTaxonomy, Family)
+
+# Reorder to match tree
 family_ds <- family_ds[match(tree$tip.label, family_ds$Family),]
 
 # Replace 0s with NA
@@ -201,6 +213,12 @@ rownames(family_ds) <- family_ds$Family
 
 # Make sure family_ds is a dataframe
 family_ds <- as.data.frame(family_ds)
+
+# Replace Sphenodon 100% with 0 so it doesn't squish the second plot
+
+family_ds <- family_ds %>% 
+  mutate(percent_taxa = case_when(percent_taxa == 100 ~ 0, 
+                                  TRUE ~ as.numeric(percent_taxa)))
 ```
 
 Make trees using ggtree.
@@ -214,7 +232,7 @@ tree_cols <- c("brown", rep("#5588ff", 7), rep("#efbbff", 10),
 # Make the tree base
 base <- 
   ggtree(tree) +
-  geom_tiplab(geom = "text", offset = 5, col = tree_cols)
+  geom_tiplab(geom = "text", offset = 5)
 
 # Plot species numbers as facet
 p1 <- facet_plot(base, panel = 'Species (n)', 
