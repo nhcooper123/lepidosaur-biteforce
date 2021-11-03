@@ -8,10 +8,10 @@ Load libraries
 library(ape)
 library(tidyverse)
 library(geiger)
-library(tidytree)
+#library(tidytree)
 library(treeio)
 library(ggtree)
-library(knitr)
+#library(knitr)
 library(ggstance)
 library(patchwork)
 library(here)
@@ -390,7 +390,7 @@ acrodontplot <-
 
 ```{r}
 # Plot all together
-higherplot + acrodontplot + dietplot + arbplot + fosplot + saxplot + 
+higherplot + acrodontplot + dietplot + fosplot + arbplot + saxplot +
   plot_layout(widths = c(2, 2), ncol = 2)
 
 # Save plot
