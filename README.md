@@ -10,7 +10,9 @@ To cite the paper:
 > Justin E Isip, Marc EH Jones and Natalie Cooper. 2022. Clade-wide variation in bite-force performance is determined primarily by size not ecology. Proceedings of the Royal Society B: Biological Sciences. DOI: 10.1098/rspb.2021.2493.
 
 To cite this repo: 
-> Justin E Isip, Marc EH Jones and Natalie Cooper. 2021. GitHub: nhcooper123/lepidosaur-biteforce. Zenodo. 
+> Justin E Isip, Marc EH Jones and Natalie Cooper. 2021. nhcooper123/lepidosaur-biteforce v.1.0:  Code for the paper. Zenodo. DOI: 10.5281/zenodo.5838511.
+
+[![DOI](https://zenodo.org/badge/308067151.svg)](https://zenodo.org/badge/latestdoi/308067151)
 
 ## Data
 
